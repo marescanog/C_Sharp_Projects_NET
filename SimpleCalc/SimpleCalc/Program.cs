@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SimpleCalculator
+namespace SimpleCalc
 {
     class Program
     {
@@ -19,12 +23,11 @@ namespace SimpleCalculator
 
                 Console.WriteLine(result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //In real world we would want to log this message
                 Console.WriteLine(ex.Message);
             }
-
         }
     }
 }

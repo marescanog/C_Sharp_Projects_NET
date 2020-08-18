@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace SimpleCalculator
+namespace SimpleCalc
 {
     public class CalculatorEngine
     {
@@ -10,7 +12,7 @@ namespace SimpleCalculator
         {
             double result;
 
-            switch(argOperation.ToLower())
+            switch (argOperation.ToLower())
             {
                 case "add":
                 case "+":
