@@ -39,7 +39,8 @@ namespace WordUnscrambler
                     Console.Write("Would you like to continue? Y/N ");
                     continueWordUnscramble = (Console.ReadLine() ?? string.Empty);
 
-                } while (!continueWordUnscramble.Equals("Y", StringComparison.OrdinalIgnoreCase) &&
+                } while (
+                !continueWordUnscramble.Equals("Y", StringComparison.OrdinalIgnoreCase) &&
                 !continueWordUnscramble.Equals("N", StringComparison.OrdinalIgnoreCase));
 
             } while (continueWordUnscramble.Equals("Y", StringComparison.OrdinalIgnoreCase));
