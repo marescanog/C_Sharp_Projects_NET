@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using WordUnscrambler.Data;
 using WordUnscrambler.Workers;
+
 
 namespace WordUnscrambler
 {
@@ -10,43 +12,52 @@ namespace WordUnscrambler
     {
         private static readonly FileReader _fileReader = new FileReader();
         private static readonly WordMatcher _wordMatcher = new WordMatcher();
-
+        
         static void Main(string[] args)
         {
-            var continueWordUnscramble = Constants.Yes;
-
-            do
+            try
             {
-                Console.WriteLine(Constants.OptionsOnHowToEnterScrabledWords);
+                //string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Constants.WordlListFileName); 
+                //to get directory of path in project, you must use using System.Reflection;
+                //then combine it with address in folder
 
-                string option = Console.ReadLine() ?? string.Empty;
-
-                switch (option.ToUpper())
-                {
-                    case Constants.File:
-                        Console.Write(Constants.EnterScrambledWordsViaFile);
-                        ExecuteScrambledWordsInFileScenario();
-                        break;
-                    case Constants.Manual:
-                        ExecuteScrambledWordsManualEntryScenario();
-                        Console.Write(Constants.EnterScrambledWordsManually);
-
-                        break;
-                    default:
-                        Console.WriteLine(Constants.EnterScrambledWordsOptionNotRecognized);
-                        break;
-                }
-
+                var continueWordUnscramble = Constants.Yes;
                 do
                 {
-                    Console.Write(Constants.OptionsOnContinuingTheProgram);
-                    continueWordUnscramble = (Console.ReadLine() ?? string.Empty);
+                    Console.WriteLine(Constants.OptionsOnHowToEnterScrabledWords);
 
-                } while (
-                !continueWordUnscramble.Equals(Constants.Yes, StringComparison.OrdinalIgnoreCase) &&
-                !continueWordUnscramble.Equals(Constants.No, StringComparison.OrdinalIgnoreCase));
+                    string option = Console.ReadLine() ?? string.Empty;
 
-            } while (continueWordUnscramble.Equals(Constants.Yes, StringComparison.OrdinalIgnoreCase));
+                    switch (option.ToUpper())
+                    {
+                        case Constants.File:
+                            Console.Write(Constants.EnterScrambledWordsViaFile);
+                            ExecuteScrambledWordsInFileScenario();
+                            break;
+                        case Constants.Manual:
+                            Console.Write(Constants.EnterScrambledWordsManually);
+                            ExecuteScrambledWordsManualEntryScenario();
+                            break;
+                        default:
+                            Console.WriteLine(Constants.EnterScrambledWordsOptionNotRecognized);
+                            break;
+                    }
+
+                    do
+                    {
+                        Console.Write(Constants.OptionsOnContinuingTheProgram);
+                        continueWordUnscramble = (Console.ReadLine() ?? string.Empty);
+
+                    } while (
+                    !continueWordUnscramble.Equals(Constants.Yes, StringComparison.OrdinalIgnoreCase) &&
+                    !continueWordUnscramble.Equals(Constants.No, StringComparison.OrdinalIgnoreCase));
+
+                } while (continueWordUnscramble.Equals(Constants.Yes, StringComparison.OrdinalIgnoreCase));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(Constants.ErrorProgramWillBeTerminated + ex.Message);
+            }
         }
 
         private static void ExecuteScrambledWordsManualEntryScenario()
