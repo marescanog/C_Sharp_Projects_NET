@@ -19,5 +19,7 @@
         public const string No = "N";
         public const string File = "F";
         public const string Manual = "N";
+
+        public const string WordlListFileName = "wordList.txt";
     }
 }
