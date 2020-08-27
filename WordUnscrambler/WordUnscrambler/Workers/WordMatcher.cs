@@ -32,7 +32,7 @@ namespace WordUnscrambler.Workers
                         var sortedScrambledWord = new string(scrambledWordArray);
                         var sortedWord = new string(wordArray);
 
-                        if (scrambledWord.Equals(word, StringComparison.OrdinalIgnoreCase))
+                        if (sortedScrambledWord.Equals(sortedWord, StringComparison.OrdinalIgnoreCase))
                         {
                             matchedwords.Add(BuildMatchedWord(scrambledWord, word));
                         }

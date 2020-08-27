@@ -5,12 +5,12 @@ namespace WordUnscrambler.Workers
 {
     class FileReader
     {
-        string[] fileContent;
         public string[] Read(string filename)
         {
+            string[] fileContent;
             try 
             {
-                string[] fileContent = File.ReadAllLines(filename);
+                fileContent = File.ReadAllLines(filename);
             }
             catch (Exception ex)
             {

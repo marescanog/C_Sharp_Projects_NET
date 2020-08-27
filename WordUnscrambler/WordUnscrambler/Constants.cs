@@ -18,8 +18,7 @@
         public const string Yes = "Y";
         public const string No = "N";
         public const string File = "F";
-        public const string Manual = "N";
-
+        public const string Manual = "M";
         public const string WordlListFileName = "wordList.txt";
     }
 }
