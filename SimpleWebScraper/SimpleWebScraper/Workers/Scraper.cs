@@ -28,7 +28,7 @@ namespace SimpleWebScraper.Workers
                     {
                         Match matchedPart = Regex.Match(match.Groups[0].Value, part.Regex, part.RegexOption);
 
-                        if (matchedPart.Success) scrapedElements.Add(match.Groups[1].Value);
+                        if (matchedPart.Success) scrapedElements.Add(matchedPart.Groups[1].Value);
                     }
                 }
             }
