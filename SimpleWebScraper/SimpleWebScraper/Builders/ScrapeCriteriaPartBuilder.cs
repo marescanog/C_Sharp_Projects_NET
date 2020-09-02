@@ -14,7 +14,7 @@ namespace SimpleWebScraper.Builders
         private string _regex;
         private RegexOptions _regexOptions;
 
-        ScrapeCriteriaPartBuilder()
+        public ScrapeCriteriaPartBuilder()
         {
             SetDefaults();
         }
@@ -31,7 +31,7 @@ namespace SimpleWebScraper.Builders
             return this;
         }
 
-        public ScrapeCriteriaPartBuilder WithRegexOptions(RegexOptions regexoptions)
+        public ScrapeCriteriaPartBuilder WithRegexOption(RegexOptions regexoptions)
         {
             _regexOptions = regexoptions;
             return this;
