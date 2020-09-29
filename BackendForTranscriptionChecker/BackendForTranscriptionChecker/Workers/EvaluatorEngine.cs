@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BackendForTranscriptionChecker.Workers
@@ -26,7 +28,14 @@ namespace BackendForTranscriptionChecker.Workers
 
                         if (referenceSegment.Count() >= intersectionOfSegmentedLists.Count()) //means missing or changed words
                         {
-                            CreateRegularExpressionForWrongWords(referenceSegment, intersectionOfSegmentedLists);
+                            string pattern = CreateRegExPatternIncorrectWords(referenceSegment, intersectionOfSegmentedLists);
+                            string data = string.Join(" ", referenceSegment);
+                            data = String.Concat(data, " ");
+                            int instances = CountInstances(pattern);
+
+                            List<string> incorrectWords = ExtractIncorrectWords(data, pattern, instances);
+
+                            Console.WriteLine("Stop");
                         }
                         else if (referenceSegment.Count() < intersectionOfSegmentedLists.Count()) //means added words
                         { 
@@ -41,45 +50,54 @@ namespace BackendForTranscriptionChecker.Workers
             }
         }
 
-        private static void CreateRegularExpressionForWrongWords(List<string> referenceSegment, List<string> intersectionOfSegmentedLists)
+        private static int CountInstances(string pattern)
         {
-            int countMissing = 0;
-            List<string> newList = new List<string>();
+            string[] array = pattern.Split(' ');
+            int count = 0;
+            foreach (var item in array)
+            {
+                if (item == "(.*?)") count++;
+            }
 
+            return count;
+        }
 
-            for (int i = 0, j=0; i < referenceSegment.Count();i++)
+        private static string CreateRegExPatternIncorrectWords(List<string> referenceSegment, List<string> intersectionOfSegmentedLists)
+        {
+            List<string> Temp = new List<string>();
+            for (int i = 0, j = 0; i < referenceSegment.Count(); i++)
             {
                 if (!referenceSegment[i].Equals(intersectionOfSegmentedLists[j], StringComparison.OrdinalIgnoreCase))
                 {
-                    newList.Add("(.*?)");
-                    countMissing++;
+                    Temp.Add("(.*?)");
                 }
                 else
                 {
-                    newList.Add(referenceSegment[i]);
+                    Temp.Add(referenceSegment[i]);
 
                     if (j < intersectionOfSegmentedLists.Count - 1) j++;
                 }
 
             }
 
+            string regularExText = string.Join(" ", Temp);
+            return String.Concat(regularExText, " (.*?)");
+        }
 
-            string regularExText = string.Join(" ", newList);
-            string reference = string.Join(" ", referenceSegment);
-
-            regularExText = String.Concat(regularExText, " (.*?)");
-            reference = String.Concat(reference, " ");
-
-            Regex r = new Regex(regularExText, RegexOptions.IgnoreCase);
-            Match mc = r.Match(reference);
+        private static List<string> ExtractIncorrectWords(string data, string patten, int instances)
+        {
+            Regex r = new Regex(patten, RegexOptions.IgnoreCase);
+            Match incorrectWords = r.Match(data);
 
             List<string> missingwords = new List<string>();
 
-            for(int i=1; i<= countMissing; i++)
+            for (int i = 1; i <= instances; i++)
             {
-                missingwords.Add(mc.Groups[i].Value);
+                if (incorrectWords.Groups[i].Value != string.Empty)
+                    missingwords.Add(incorrectWords.Groups[i].Value);
             }
 
+            return missingwords;
         }
 
         private List<string> GetInterSection(List<string> reference, List<string> evaluation)
