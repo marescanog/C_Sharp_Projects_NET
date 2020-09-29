@@ -7,6 +7,12 @@ namespace BackendForTranscriptionChecker.Workers
 {
     class FileReader
     {
+        /// <summary>
+        ///No need to convert to uppercase since there is a StringComparison.OrdinalIgnoreCase
+        ///StringOriginal.Equals(stringtoCompare, StringComparison.OrdinalIgnoreCase)
+        ///Also take out punctuation.
+        /// </summary>
+
         public List<string> Read(string filename)
         {
             string[] fileContent;
@@ -17,7 +23,7 @@ namespace BackendForTranscriptionChecker.Workers
             {
                 fileContent = File.ReadAllLines(filename);
                 singleString = string.Join(" ", fileContent);
-                convertedList = SplitbyWordToUpper(singleString);
+                convertedList = SplitbyWord(singleString);
             }
             catch(Exception ex)
             {
@@ -27,9 +33,9 @@ namespace BackendForTranscriptionChecker.Workers
             return convertedList;
         }
 
-        private List<string> SplitbyWordToUpper(string phrase)
+        private List<string> SplitbyWord(string phrase)
         {
-            return phrase.ToUpper().Split(' ').ToList();
+            return phrase.Split(' ').ToList();
         }
     }
 }

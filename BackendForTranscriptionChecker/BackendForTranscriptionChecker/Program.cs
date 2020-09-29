@@ -9,13 +9,18 @@ namespace BackendForTranscriptionChecker
 {
     class Program
     {
-        private static readonly FileReader _fileReader = new FileReader();
         static void Main(string[] args)
         {
             try
             {
-                List<string> referenceText = _fileReader.Read("Reference.txt");
-                List<string> evaluatedText = _fileReader.Read("Evaluated.txt");
+                FileReader fileReader = new FileReader();
+
+                List<string> referenceText = fileReader.Read("Reference.txt");
+                List<string> evaluatedText = fileReader.Read("Evaluated.txt");
+
+                EvaluatorEngine evaluatorEngine = new EvaluatorEngine();
+
+                evaluatorEngine.EvaluateText(referenceText, evaluatedText);
 
                 Console.WriteLine("Check");
             }
