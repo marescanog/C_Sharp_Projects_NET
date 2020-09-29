@@ -15,9 +15,10 @@ namespace BackendForTranscriptionChecker.Workers
 
             if (intersection.Count()==0)
             {
+                //Turns every word into a delimeter
                 foreach(var item in reference)
                 {
-                    Temp.Add("(.*?)");
+                    Temp.Add(Constants.delimiter);
                 }
             }
             else
@@ -26,7 +27,7 @@ namespace BackendForTranscriptionChecker.Workers
                 {
                     if (!reference[i].Equals(intersection[j], StringComparison.OrdinalIgnoreCase))
                     {
-                        Temp.Add("(.*?)");
+                        Temp.Add(Constants.delimiter);
                     }
                     else
                     {
@@ -38,8 +39,7 @@ namespace BackendForTranscriptionChecker.Workers
                 }
             }
 
-            string regularExText = string.Join(" ", Temp);
-            return String.Concat(regularExText, " (.*?)");
+            return string.Join(Constants.space, Temp);
         }
 
         private string[] GetInterSection(string[] reference, string[] evaluation)

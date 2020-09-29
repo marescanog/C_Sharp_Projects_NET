@@ -9,7 +9,7 @@ namespace BackendForTranscriptionChecker.Workers
 
     class EvaluatorEngine
     {
-        RegExPatternCreator _regExPatternCreator = new RegExPatternCreator();
+        RegExPatternCreator _regExPatternCreator;
 
         public EvaluatorEngine(RegExPatternCreator regExPatternCreator)
         {
@@ -28,24 +28,19 @@ namespace BackendForTranscriptionChecker.Workers
                         List<string> referenceSegment = CaptureSegment(i, reference);
                         List<string> evalutaionSegment = CaptureSegment(i, evaluation);
 
-                        //Get Intersection of those two segments
-                        List<string> intersectionOfSegmentedLists = GetInterSection(referenceSegment, evaluation);
 
-                        if (referenceSegment.Count() >= intersectionOfSegmentedLists.Count()) //means missing or changed words
-                        {
-                            string pattern = CreateRegExPatternIncorrectWords(referenceSegment, intersectionOfSegmentedLists);
-                            string data = string.Join(" ", referenceSegment);
-                            data = String.Concat(data, " ");
-                            int instances = CountInstances(pattern);
+                        string pattern = _regExPatternCreator.CreateRegexPattern(referenceSegment.ToArray(), evalutaionSegment.ToArray());
 
-                            List<string> incorrectWords = ExtractIncorrectWords(data, pattern, instances);
+                        //CreateRegExPatternIncorrectWords(referenceSegment, intersectionOfSegmentedLists);
+                        string data = string.Join(Constants.space, referenceSegment);
+                        data = String.Concat(data, Constants.space);
+                        int instances = CountInstances(pattern);
 
-                            Console.WriteLine("Stop");
-                        }
-                        else if (referenceSegment.Count() < intersectionOfSegmentedLists.Count()) //means added words
-                        { 
+                        List<string> incorrectWords = ExtractIncorrectWords(data, pattern, instances);
 
-                        }
+                        Console.WriteLine("Stop");
+
+
                     }
                 }
             }
@@ -78,39 +73,12 @@ namespace BackendForTranscriptionChecker.Workers
             int count = 0;
             foreach (var item in array)
             {
-                if (item == "(.*?)") count++;
+                if (item == Constants.delimiter) count++;
             }
 
             return count;
         }
-        public string CreateRegExPatternIncorrectWords(List<string> referenceSegment, List<string> intersectionOfSegmentedLists)
-        {
-            List<string> Temp = new List<string>();
-            for (int i = 0, j = 0; i < referenceSegment.Count(); i++)
-            {
-                if (!referenceSegment[i].Equals(intersectionOfSegmentedLists[j], StringComparison.OrdinalIgnoreCase))
-                {
-                    Temp.Add("(.*?)");
-                }
-                else
-                {
-                    Temp.Add(referenceSegment[i]);
-
-                    if (j < intersectionOfSegmentedLists.Count - 1) j++;
-                }
-
-            }
-
-            string regularExText = string.Join(" ", Temp);
-            return String.Concat(regularExText, " (.*?)");
-        }
-
-        private List<string> GetInterSection(List<string> reference, List<string> evaluation)
-        {
-            var intersection = reference.Intersect(evaluation);
-            return intersection.ToList();
-        }
-        
+       
         private List<string> CaptureSegment(int currentIndex, List<string> list)
         {
             List<string> temp = new List<string>();

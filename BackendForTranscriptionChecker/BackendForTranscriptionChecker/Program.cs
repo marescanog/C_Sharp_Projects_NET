@@ -18,11 +18,11 @@ namespace BackendForTranscriptionChecker
                 List<string> referenceText = fileReader.Read("Reference.txt");
                 List<string> evaluatedText = fileReader.Read("Evaluated.txt");
 
-
-                RegExPatternCreator regExPatternCreator = new RegExPatternCreator();
-                EvaluatorEngine evaluatorEngine = new EvaluatorEngine(regExPatternCreator);
+                EvaluatorEngine evaluatorEngine = new EvaluatorEngine(new RegExPatternCreator());
 
                 evaluatorEngine.EvaluateText(referenceText, evaluatedText);
+
+             
 
                 Console.WriteLine("Check");
             }

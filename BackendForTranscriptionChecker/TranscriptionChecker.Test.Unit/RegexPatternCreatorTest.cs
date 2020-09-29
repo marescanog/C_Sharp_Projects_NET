@@ -19,7 +19,7 @@ namespace TranscriptionChecker.Test.Unit
 
             string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
-            Assert.IsTrue(regexPattern == "A B C D E (.*?)");
+            Assert.IsTrue(regexPattern == "A B C D E");
 
         }
 
@@ -31,7 +31,7 @@ namespace TranscriptionChecker.Test.Unit
 
             string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
-            Assert.IsTrue(regexPattern == "A A A A A (.*?)");
+            Assert.IsTrue(regexPattern == "A A A A A");
 
         }
 
@@ -43,7 +43,7 @@ namespace TranscriptionChecker.Test.Unit
 
             string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
-            Assert.IsTrue(regexPattern == "(.*?) (.*?) (.*?) (.*?) (.*?) (.*?)");
+            Assert.IsTrue(regexPattern == "(.*) (.*) (.*) (.*) (.*)");
 
         }
 
@@ -55,7 +55,7 @@ namespace TranscriptionChecker.Test.Unit
 
             string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
-            Assert.IsTrue(regexPattern == "(.*?) B C D E (.*?)");
+            Assert.IsTrue(regexPattern == "(.*) B C D E");
 
         }
 
@@ -67,7 +67,7 @@ namespace TranscriptionChecker.Test.Unit
 
             string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
-            Assert.IsTrue(regexPattern == "A (.*?) C D E (.*?)");
+            Assert.IsTrue(regexPattern == "A (.*) C D E");
 
         }
 
@@ -79,7 +79,7 @@ namespace TranscriptionChecker.Test.Unit
 
             string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
-            Assert.IsTrue(regexPattern == "A B (.*?) D E (.*?)");
+            Assert.IsTrue(regexPattern == "A B (.*) D E");
 
         }
 
@@ -91,7 +91,7 @@ namespace TranscriptionChecker.Test.Unit
 
             string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
-            Assert.IsTrue(regexPattern == "A B C (.*?) E (.*?)");
+            Assert.IsTrue(regexPattern == "A B C (.*) E");
 
         }
 
@@ -103,7 +103,7 @@ namespace TranscriptionChecker.Test.Unit
 
             string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
-            Assert.IsTrue(regexPattern == "A B C D (.*?) (.*?)");
+            Assert.IsTrue(regexPattern == "A B C D (.*)");
 
         }
 
@@ -115,7 +115,7 @@ namespace TranscriptionChecker.Test.Unit
 
             string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
-            Assert.IsTrue(regexPattern == "(.*?) (.*?) C D E (.*?)");
+            Assert.IsTrue(regexPattern == "(.*) (.*) C D E");
 
         }
 
@@ -127,7 +127,7 @@ namespace TranscriptionChecker.Test.Unit
 
             string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
-            Assert.IsTrue(regexPattern == "(.*?) (.*?) (.*?) D E (.*?)");
+            Assert.IsTrue(regexPattern == "(.*) (.*) (.*) D E");
 
         }
 
@@ -139,8 +139,70 @@ namespace TranscriptionChecker.Test.Unit
 
             string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
-            Assert.IsTrue(regexPattern == "(.*?) (.*?) (.*?) (.*?) E (.*?)");
+            Assert.IsTrue(regexPattern == "(.*) (.*) (.*) (.*) E");
 
         }
+
+        [TestMethod]
+        public void RepetitivePattern()
+        {
+            string[] refArray = { "A", "B", "A", "B", "A" };
+            string[] evalArray = { "A", "B", "A", "F", "A" };
+
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
+
+            Assert.IsTrue(regexPattern == "A B A (.*) A");
+
+        }
+
+        [TestMethod]
+        public void RepetitivePatternComplex()
+        {
+            string[] refArray = { "A", "B", "A", "B", "D", "A", "B", "F" };
+            string[] evalArray = { "A", "B", "A", "F", "A", "B" };
+
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
+
+            Assert.IsTrue(regexPattern == "A B A (.*) (.*) A B (.*)");
+
+        }
+
+        [TestMethod]
+        public void RepetitivePatternComplex2()
+        {
+            string[] refArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
+            string[] evalArray = { "A", "B", "A", "F", "A", "B" };
+
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
+
+            Assert.IsTrue(regexPattern == "(.*) B A (.*) A B (.*) (.*)");
+
+        }
+
+        [TestMethod]
+        public void RepetitivePatternComplex3()
+        {
+            string[] refArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
+            string[] evalArray = { "B", "A", "F", "A", "B" };
+
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
+
+            Assert.IsTrue(regexPattern == "(.*) B A (.*) (.*) A B (.*)");
+
+        }
+
+        /*
+        [TestMethod]
+        public void RepetitivePattern()
+        {
+            string[] refArray = { "A", "B", "A", "B", "A" };
+            string[] evalArray = { "A", "B", "A", "B", "A" };
+
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
+
+            Assert.IsTrue(regexPattern == "(.*) (.*) (.*) (.*) E");
+
+        }
+        */
     }
 }
