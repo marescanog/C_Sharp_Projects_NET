@@ -17,7 +17,7 @@ namespace TranscriptionChecker.Test.Unit
             string[] refArray = { "A", "B", "C", "D", "E" };
             string[] evalArray = { "A", "B", "C", "D", "E" };
 
-            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray.ToList(), evalArray.ToList());
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
             Assert.IsTrue(regexPattern == "A B C D E (.*?)");
 
@@ -29,7 +29,7 @@ namespace TranscriptionChecker.Test.Unit
             string[] refArray = { "A", "A", "A", "A", "A" };
             string[] evalArray = { "A", "A", "A", "A", "A" };
 
-            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray.ToList(), evalArray.ToList());
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
             Assert.IsTrue(regexPattern == "A A A A A (.*?)");
 
@@ -41,7 +41,7 @@ namespace TranscriptionChecker.Test.Unit
             string[] refArray = { "A", "B", "C", "D", "E" };
             string[] evalArray = { "F", "F", "F", "F", "F" };
 
-            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray.ToList(), evalArray.ToList());
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
             Assert.IsTrue(regexPattern == "(.*?) (.*?) (.*?) (.*?) (.*?) (.*?)");
 
@@ -53,7 +53,7 @@ namespace TranscriptionChecker.Test.Unit
             string[] refArray = { "A", "B", "C", "D", "E" };
             string[] evalArray = { "F", "B", "C", "D", "E" };
 
-            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray.ToList(), evalArray.ToList());
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
             Assert.IsTrue(regexPattern == "(.*?) B C D E (.*?)");
 
@@ -65,7 +65,7 @@ namespace TranscriptionChecker.Test.Unit
             string[] refArray = { "A", "B", "C", "D", "E" };
             string[] evalArray = { "A", "F", "C", "D", "E" };
 
-            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray.ToList(), evalArray.ToList());
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
             Assert.IsTrue(regexPattern == "A (.*?) C D E (.*?)");
 
@@ -77,7 +77,7 @@ namespace TranscriptionChecker.Test.Unit
             string[] refArray = { "A", "B", "C", "D", "E" };
             string[] evalArray = { "A", "B", "F", "D", "E" };
 
-            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray.ToList(), evalArray.ToList());
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
             Assert.IsTrue(regexPattern == "A B (.*?) D E (.*?)");
 
@@ -89,7 +89,7 @@ namespace TranscriptionChecker.Test.Unit
             string[] refArray = { "A", "B", "C", "D", "E" };
             string[] evalArray = { "A", "B", "C", "F", "E" };
 
-            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray.ToList(), evalArray.ToList());
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
             Assert.IsTrue(regexPattern == "A B C (.*?) E (.*?)");
 
@@ -101,7 +101,7 @@ namespace TranscriptionChecker.Test.Unit
             string[] refArray = { "A", "B", "C", "D", "E" };
             string[] evalArray = { "A", "B", "C", "D", "F" };
 
-            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray.ToList(), evalArray.ToList());
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
             Assert.IsTrue(regexPattern == "A B C D (.*?) (.*?)");
 
@@ -113,7 +113,7 @@ namespace TranscriptionChecker.Test.Unit
             string[] refArray = { "A", "B", "C", "D", "E" };
             string[] evalArray = { "F", "F", "C", "D", "E" };
 
-            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray.ToList(), evalArray.ToList());
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
             Assert.IsTrue(regexPattern == "(.*?) (.*?) C D E (.*?)");
 
@@ -125,7 +125,7 @@ namespace TranscriptionChecker.Test.Unit
             string[] refArray = { "A", "B", "C", "D", "E" };
             string[] evalArray = { "F", "F", "F", "D", "E" };
 
-            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray.ToList(), evalArray.ToList());
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
             Assert.IsTrue(regexPattern == "(.*?) (.*?) (.*?) D E (.*?)");
 
@@ -137,7 +137,7 @@ namespace TranscriptionChecker.Test.Unit
             string[] refArray = { "A", "B", "C", "D", "E" };
             string[] evalArray = { "F", "F", "F", "F", "E" };
 
-            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray.ToList(), evalArray.ToList());
+            string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
 
             Assert.IsTrue(regexPattern == "(.*?) (.*?) (.*?) (.*?) E (.*?)");
 

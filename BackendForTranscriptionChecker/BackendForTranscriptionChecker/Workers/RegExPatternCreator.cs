@@ -7,10 +7,10 @@ namespace BackendForTranscriptionChecker.Workers
 {
     class RegExPatternCreator
     {
-        public string CreateRegexPattern(List<string> reference, List<string> evaluation)
+        public string CreateRegexPattern(string[] reference, string[] evaluation)
         {
 
-            List<string> intersection = GetInterSection(reference, evaluation);
+            string[] intersection = GetInterSection(reference, evaluation);
             List<string> Temp = new List<string>();
 
             if (intersection.Count()==0)
@@ -32,7 +32,7 @@ namespace BackendForTranscriptionChecker.Workers
                     {
                         Temp.Add(reference[i]);
 
-                        if (j < intersection.Count - 1) j++;
+                        if (j < intersection.Length - 1) j++;
                     }
 
                 }
@@ -42,10 +42,10 @@ namespace BackendForTranscriptionChecker.Workers
             return String.Concat(regularExText, " (.*?)");
         }
 
-        private List<string> GetInterSection(List<string> reference, List<string> evaluation)
+        private string[] GetInterSection(string[] reference, string[] evaluation)
         {
             var intersection = reference.Intersect(evaluation);
-            return intersection.ToList();
+            return intersection.ToArray();
         }
     }
 }
