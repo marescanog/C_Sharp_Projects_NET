@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendForTranscriptionChecker", "BackendForTranscriptionChecker\BackendForTranscriptionChecker.csproj", "{D3D1C9E1-B5E4-4A09-9D92-124448DA9F20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranscriptionChecker.Test.Unit", "TranscriptionChecker.Test.Unit\TranscriptionChecker.Test.Unit.csproj", "{8CB12896-FC44-48D8-9D19-2799DB30D7EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D3D1C9E1-B5E4-4A09-9D92-124448DA9F20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3D1C9E1-B5E4-4A09-9D92-124448DA9F20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3D1C9E1-B5E4-4A09-9D92-124448DA9F20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CB12896-FC44-48D8-9D19-2799DB30D7EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CB12896-FC44-48D8-9D19-2799DB30D7EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CB12896-FC44-48D8-9D19-2799DB30D7EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CB12896-FC44-48D8-9D19-2799DB30D7EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

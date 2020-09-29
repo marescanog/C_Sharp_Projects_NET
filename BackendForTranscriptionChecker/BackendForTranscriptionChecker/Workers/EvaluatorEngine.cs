@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
+
 
 namespace BackendForTranscriptionChecker.Workers
 {
+
     class EvaluatorEngine
-    {       
+    {
+        RegExPatternCreator _regExPatternCreator = new RegExPatternCreator();
+
+        public EvaluatorEngine(RegExPatternCreator regExPatternCreator)
+        {
+            _regExPatternCreator = regExPatternCreator;
+        }
+
         public void EvaluateText(List<string> reference, List<string> evaluation)
         {
             try
@@ -24,7 +29,7 @@ namespace BackendForTranscriptionChecker.Workers
                         List<string> evalutaionSegment = CaptureSegment(i, evaluation);
 
                         //Get Intersection of those two segments
-                        List<string> intersectionOfSegmentedLists = GetInterSection(referenceSegment, evalutaionSegment);
+                        List<string> intersectionOfSegmentedLists = GetInterSection(referenceSegment, evaluation);
 
                         if (referenceSegment.Count() >= intersectionOfSegmentedLists.Count()) //means missing or changed words
                         {
@@ -50,6 +55,23 @@ namespace BackendForTranscriptionChecker.Workers
             }
         }
 
+        
+        private static List<string> ExtractIncorrectWords(string data, string patten, int instances)
+        {
+            Regex r = new Regex(patten, RegexOptions.IgnoreCase);
+            Match incorrectWords = r.Match(data);
+
+            List<string> missingwords = new List<string>();
+
+            for (int i = 1; i <= instances; i++)
+            {
+                if (incorrectWords.Groups[i].Value != string.Empty)
+                    missingwords.Add(incorrectWords.Groups[i].Value);
+            }
+
+            return missingwords;
+        }
+
         private static int CountInstances(string pattern)
         {
             string[] array = pattern.Split(' ');
@@ -61,8 +83,7 @@ namespace BackendForTranscriptionChecker.Workers
 
             return count;
         }
-
-        private static string CreateRegExPatternIncorrectWords(List<string> referenceSegment, List<string> intersectionOfSegmentedLists)
+        public string CreateRegExPatternIncorrectWords(List<string> referenceSegment, List<string> intersectionOfSegmentedLists)
         {
             List<string> Temp = new List<string>();
             for (int i = 0, j = 0; i < referenceSegment.Count(); i++)
@@ -82,22 +103,6 @@ namespace BackendForTranscriptionChecker.Workers
 
             string regularExText = string.Join(" ", Temp);
             return String.Concat(regularExText, " (.*?)");
-        }
-
-        private static List<string> ExtractIncorrectWords(string data, string patten, int instances)
-        {
-            Regex r = new Regex(patten, RegexOptions.IgnoreCase);
-            Match incorrectWords = r.Match(data);
-
-            List<string> missingwords = new List<string>();
-
-            for (int i = 1; i <= instances; i++)
-            {
-                if (incorrectWords.Groups[i].Value != string.Empty)
-                    missingwords.Add(incorrectWords.Groups[i].Value);
-            }
-
-            return missingwords;
         }
 
         private List<string> GetInterSection(List<string> reference, List<string> evaluation)

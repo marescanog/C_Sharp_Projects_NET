@@ -18,7 +18,9 @@ namespace BackendForTranscriptionChecker
                 List<string> referenceText = fileReader.Read("Reference.txt");
                 List<string> evaluatedText = fileReader.Read("Evaluated.txt");
 
-                EvaluatorEngine evaluatorEngine = new EvaluatorEngine();
+
+                RegExPatternCreator regExPatternCreator = new RegExPatternCreator();
+                EvaluatorEngine evaluatorEngine = new EvaluatorEngine(regExPatternCreator);
 
                 evaluatorEngine.EvaluateText(referenceText, evaluatedText);
 
