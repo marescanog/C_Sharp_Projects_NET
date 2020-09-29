@@ -24,13 +24,9 @@ namespace BackendForTranscriptionChecker.Workers
                         //Get Intersection of those two segments
                         List<string> intersectionOfSegmentedLists = GetInterSection(referenceSegment, evalutaionSegment);
 
-                        if (referenceSegment.Count() == intersectionOfSegmentedLists.Count()) //means changed words
+                        if (referenceSegment.Count() >= intersectionOfSegmentedLists.Count()) //means missing or changed words
                         {
-
-                        }
-                        else if (referenceSegment.Count() > intersectionOfSegmentedLists.Count()) //means missing words
-                        {
-                            CreateRegularExpressionForMissingWords(referenceSegment, intersectionOfSegmentedLists);
+                            CreateRegularExpressionForWrongWords(referenceSegment, intersectionOfSegmentedLists);
                         }
                         else if (referenceSegment.Count() < intersectionOfSegmentedLists.Count()) //means added words
                         { 
@@ -45,25 +41,30 @@ namespace BackendForTranscriptionChecker.Workers
             }
         }
 
-        private static void CreateRegularExpressionForMissingWords(List<string> referenceSegment, List<string> intersectionOfSegmentedLists)
+        private static void CreateRegularExpressionForWrongWords(List<string> referenceSegment, List<string> intersectionOfSegmentedLists)
         {
             int countMissing = 0;
-            string check;
+            List<string> newList = new List<string>();
 
-            for (int i = 0; i < referenceSegment.Count(); i++)
+
+            for (int i = 0, j=0; i < referenceSegment.Count();i++)
             {
-                check = (i < intersectionOfSegmentedLists.Count) ? intersectionOfSegmentedLists[i] : string.Empty;
-
-                if (!referenceSegment[i].Equals(check, StringComparison.OrdinalIgnoreCase))
+                if (!referenceSegment[i].Equals(intersectionOfSegmentedLists[j], StringComparison.OrdinalIgnoreCase))
                 {
-                    //The quick brown fox jumps over the lazy dog
-                    //The black fox jumps over the lazy dog
-                    intersectionOfSegmentedLists.Insert(i, "(.*?)");
+                    newList.Add("(.*?)");
                     countMissing++;
+                }
+                else
+                {
+                    newList.Add(referenceSegment[i]);
+
+                    if (j < intersectionOfSegmentedLists.Count - 1) j++;
                 }
 
             }
-            string regularExText = string.Join(" ", intersectionOfSegmentedLists);
+
+
+            string regularExText = string.Join(" ", newList);
             string reference = string.Join(" ", referenceSegment);
 
             regularExText = String.Concat(regularExText, " (.*?)");
