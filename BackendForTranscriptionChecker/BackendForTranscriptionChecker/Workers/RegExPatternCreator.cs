@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 
@@ -47,5 +48,16 @@ namespace BackendForTranscriptionChecker.Workers
             var intersection = reference.Intersect(evaluation);
             return intersection.ToArray();
         }
+
+        public int LookBack(int index, string[] array, string[] correctWords)
+        {
+            // A A A B A A A A B                
+            // B A F F A B
+
+
+            return 0;
+        }
+
+
     }
 }
