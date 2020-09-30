@@ -25,13 +25,11 @@ namespace BackendForTranscriptionChecker
                 RegExPatternCreator _regExPatternCreator = new RegExPatternCreator();
                 PatternGroupBuilder _patternGroupBuilder = new PatternGroupBuilder();
 
-                string[] refArray = { "A", "A", "A", "B", "A", "A", "A", "A", "B" };
-                string[] evalArray = { "B", "A", "F", "F", "A", "B" };
+                //string[] refArray = { "A", "A", "A", "B", "A", "A", "A", "A", "B" };
+                //string[] evalArray = { "B", "A", "F", "F", "A", "B" };
 
-                //string[] refArray = { "A", "B", "C", "D", "E" };
-                //string[] evalArray = { "A", "B", "C", "D", "E" };
-
-
+                string[] refArray = { "A", "B", "C", "D", "E" };
+                string[] evalArray = { "A", "B", "C", "D", "E" };
 
                 //string expectedOutCome = "(.*) A A B (.*) (.*) (.*) (.*) (.*)";
                 string expectedOutComeCrossCheck = "\nA\nA B\n";
@@ -57,3 +55,5 @@ namespace BackendForTranscriptionChecker
         }
     }
 }
+
+
