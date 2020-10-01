@@ -10,48 +10,19 @@ namespace BackendForTranscriptionChecker.Workers
     class PatternGroupBuilder
     {
         private readonly CrossChecker _crossChecker = new CrossChecker();
+        private List<string> groupedWords = new List<string>();
+        private List<string> listOfGroupedWords = new List<string>();
 
         public string[] GroupSuccessiveCorrectWords(string[] refArray, string[] evalArray)
         {
             string[] correctWords = _crossChecker.GetCorrectWords(refArray, evalArray);
-
-            List<string> groupedWords = new List<string>();
-            List<string> listOfGroupedWords = new List<string>();
             List<string> dynaRefArray = refArray.ToList();
-            // B A F F A B
-            // A A B
-            //string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "H" };
-
-            //string[] refArray = { "A", "B", "C", "D", "E", "F", "G", "H" };
-            //string[] evalArray = { "A", "B", "D", "D", "E", "G", "G", "H" };
-            //Cross = A B D E G H
-
-
-            //string[] refArray = { "C", "D", "E", "F", "G", "H" };
-            //string[] evalArray = { "D", "D", "E", "G", "G", "H" };
-            //Cross = D E G H
-            //int keyIndex = Array.IndexOf(refArray, correctWords[i]);
-            //if (keyIndex > 0)
-            //{
-            //start new list
-            //}
-
-            //string[] refArray = { "A", "B", "C", "D", "E", "F", "G", "H" };
-            //string[] evalArray = { "A", "B", "D", "D", "E", "G", "G", "H" };
-            //Cross = A B D E G H
-
-            //string[] refArray = { "A", "B", "C", "C", "D", "E", "F", "G", "H" }; // add another letter between B and D, next to C 
-            //string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "H" }; add another G to eval array
-            //Cross = A B D E G H
-
-            //string[] refArray = { "A", "B", "C", "C", "D", "E", "F", "G", "H" };
-            //string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "G", "H" };
 
             for (int i = 0, k = 0; i <= correctWords.Length;)
             {
                 if (i == correctWords.Length)
                 {
-                    ResetList(groupedWords, listOfGroupedWords);
+                    ResetList();
                     i++;
                 }
                 else if (correctWords[i] == evalArray[k])
@@ -62,7 +33,8 @@ namespace BackendForTranscriptionChecker.Workers
                     {
                         int repCount = 0;
 
-                        ResetList(groupedWords, listOfGroupedWords);
+                        ResetList();
+                        dynaRefArray.RemoveRange(0, keyIndex);
 
                         if (k + 1 != evalArray.Length && evalArray[k].Equals(evalArray[k + 1], StringComparison.OrdinalIgnoreCase)) // Detects if there are repetitions
                         {
@@ -82,11 +54,6 @@ namespace BackendForTranscriptionChecker.Workers
                                 }
                             }
 
-                            //If there are repeititions, removes them
-                            //if (i != 0) //change check later??
-                            
-                            dynaRefArray.RemoveRange(0, keyIndex);
-                            
 
                             k = k + repCount;
 
@@ -113,19 +80,16 @@ namespace BackendForTranscriptionChecker.Workers
                             dynaRefArray.RemoveRange(0, keyIndex);
                         }
 
-                        ResetList(groupedWords, listOfGroupedWords);
+                        ResetList();
                         k++;
                     }
                 }
             }
 
-
-            //AnalysisTempTransferBackhereIfthisisBetter(evalArray, correctWords, groupedWords, listOfGroupedWords);
-
             return listOfGroupedWords.ToArray();
         }
 
-        private static void ResetList(List<string> groupedWords, List<string> listOfGroupedWords)
+        private void ResetList()
         {
             listOfGroupedWords.Add(String.Join(Constants.space, groupedWords));
             groupedWords.Clear();
