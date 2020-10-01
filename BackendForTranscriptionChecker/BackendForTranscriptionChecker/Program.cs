@@ -35,24 +35,27 @@ namespace BackendForTranscriptionChecker
                 //string[] refArray = { "A", "B", "C", "C", "D", "E", "F", "G", "H" };
                 //string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "G", "H" };
 
-                string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
-                string[] evalArray = { "A", "B", "O", "G", "H", "I", "J", "K", "L" };
+                ////string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
+                ////string[] evalArray = { "A", "B", "O", "G", "H", "I", "J", "K", "L", "F" };
 
                 //string expectedOutCome = "(.*) A A B (.*) (.*) (.*) (.*) (.*)";
-                string expectedOutComeCrossCheck = "\nA\nA B\n";
+                //string expectedOutComeCrossCheck = "\nA\nA B\n";
 
-                string[] arrayOFCorrectWords = _crossChecker.GetCorrectWords(refArray, evalArray);
+                //string[] arrayOFCorrectWords = _crossChecker.GetCorrectWords(refArray, evalArray);
                 //string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
-                
-                Console.WriteLine("ExpctPattern: {0}", expectedOutComeCrossCheck);
-                Console.WriteLine("ActualPattern: ");
 
-                foreach(var word in arrayOFCorrectWords)
-                {
-                    Console.WriteLine(word);
-                }
+                //Console.WriteLine("ExpctPattern: {0}", expectedOutComeCrossCheck);
+                //Console.WriteLine("ActualPattern: ");
 
-                Console.WriteLine("Check");
+                string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
+                string[] evalArray = { "A", "B", "B", "B", "B", "I", "I", "I", "I", "F" };
+
+                string[] correctWords = _crossChecker.GetCorrectWords(refArray, evalArray);
+
+                Console.WriteLine(String.Join(" ", correctWords));
+
+
+                Console.WriteLine("End");
             }
             catch (Exception ex)
             {

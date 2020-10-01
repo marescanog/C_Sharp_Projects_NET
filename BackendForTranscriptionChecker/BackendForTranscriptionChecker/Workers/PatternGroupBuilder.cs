@@ -21,7 +21,7 @@ namespace BackendForTranscriptionChecker.Workers
 
             /* Input Values here to check for reference
             string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
-            string[] evalArray = { "A", "B", "O", "G", "H", "I", "J", "K", "L" };
+            string[] evalArray = { "A", "B", "O", "G", "H", "I", "J", "K", "L", "F" };
 
             string[] expected = { "A B", "G H I J K L" };
             */

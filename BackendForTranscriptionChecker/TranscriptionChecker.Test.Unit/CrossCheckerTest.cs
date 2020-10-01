@@ -45,7 +45,7 @@ namespace TranscriptionChecker.Test.Unit
             string[] check = _crossChecker.GetCorrectWords(refArray, evalArray);
             string arrayPattern = String.Join(Constants.space, check);
 
-            Assert.IsTrue(arrayPattern == string.Empty);
+            Assert.IsTrue(check.Length == 0);
 
         }
 
@@ -214,8 +214,31 @@ namespace TranscriptionChecker.Test.Unit
             string[] check = _crossChecker.GetCorrectWords(refArray, evalArray);
             string arrayPattern = String.Join(Constants.space, check);
 
-            Assert.IsTrue(arrayPattern == "A B H I J K L");
+            Assert.IsTrue(arrayPattern == "A B G H I J K L");
         }
 
+        [TestMethod]
+        public void TwoSegmentsRefLeadingTruRepSep()
+        {
+            string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
+            string[] evalArray = { "A", "B", "O", "G", "H", "I", "J", "K", "L", "F" };
+
+            string[] check = _crossChecker.GetCorrectWords(refArray, evalArray);
+            string arrayPattern = String.Join(Constants.space, check);
+
+            Assert.IsTrue(arrayPattern == "A B G H I J K L");
+        }
+
+        [TestMethod]
+        public void WhatIfTheSecondArrayKeepsRepeating() //highlight of my life
+        {
+            string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
+            string[] evalArray = { "A", "B", "B", "B", "B", "I", "I", "I", "I", "F" };
+
+            string[] check = _crossChecker.GetCorrectWords(refArray, evalArray);
+            string arrayPattern = String.Join(Constants.space, check);
+
+            Assert.IsTrue(arrayPattern == "A B I");
+        }
     }
 }
