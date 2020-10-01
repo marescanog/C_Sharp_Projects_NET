@@ -205,6 +205,17 @@ namespace TranscriptionChecker.Test.Unit
 
         }
 
+        [TestMethod]
+        public void TwoSegmentsRefLeadingRepSep()
+        {
+            string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
+            string[] evalArray = { "A", "B", "O", "G", "H", "I", "J", "K", "L" };
+
+            string[] check = _crossChecker.GetCorrectWords(refArray, evalArray);
+            string arrayPattern = String.Join(Constants.space, check);
+
+            Assert.IsTrue(arrayPattern == "A B H I J K L");
+        }
 
     }
 }

@@ -9,6 +9,15 @@ namespace BackendForTranscriptionChecker.Workers
             List<string> correctWords = new List<string>();
             int maxRef = refArray.Length -1 , maxEval = evalArray.Length -1;
 
+            /*
+                string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
+                string[] evalArray = { "A", "B", "O", "G", "H", "I", "J", "K", "L" };
+
+                string[] Expected = {"A B G H I J K L"}
+            */
+
+
+
             for (int i = 0, k = 0; i <= maxRef || k <= maxEval;)
             {
 

@@ -23,7 +23,8 @@ namespace BackendForTranscriptionChecker
 
 
                 RegExPatternCreator _regExPatternCreator = new RegExPatternCreator();
-                PatternGroupBuilder _patternGroupBuilder = new PatternGroupBuilder();
+                //PatternGroupBuilder _patternGroupBuilder = new PatternGroupBuilder();
+                CrossChecker _crossChecker = new CrossChecker();
 
                 //string[] refArray = { "A", "A", "A", "B", "A", "A", "A", "A", "B" };
                 //string[] evalArray = { "B", "A", "F", "F", "A", "B" };
@@ -34,13 +35,13 @@ namespace BackendForTranscriptionChecker
                 //string[] refArray = { "A", "B", "C", "C", "D", "E", "F", "G", "H" };
                 //string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "G", "H" };
 
-                string[] refArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
-                string[] evalArray = { "A", "B", "A", "F", "A", "B" };
+                string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
+                string[] evalArray = { "A", "B", "O", "G", "H", "I", "J", "K", "L" };
 
                 //string expectedOutCome = "(.*) A A B (.*) (.*) (.*) (.*) (.*)";
                 string expectedOutComeCrossCheck = "\nA\nA B\n";
 
-                string[] arrayOFCorrectWords = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+                string[] arrayOFCorrectWords = _crossChecker.GetCorrectWords(refArray, evalArray);
                 //string regexPattern = _regExPatternCreator.CreateRegexPattern(refArray, evalArray);
                 
                 Console.WriteLine("ExpctPattern: {0}", expectedOutComeCrossCheck);

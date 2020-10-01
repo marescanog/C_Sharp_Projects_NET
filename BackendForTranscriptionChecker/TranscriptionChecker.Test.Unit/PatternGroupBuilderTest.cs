@@ -277,7 +277,6 @@ namespace TranscriptionChecker.Test.Unit
             }
         }
 
-        
         [TestMethod]
         public void Pattern2()
         {
@@ -293,8 +292,6 @@ namespace TranscriptionChecker.Test.Unit
                 Assert.IsTrue(expected[i] == generatedPattern[i]);
             }
         }
-        
-        
 
         [TestMethod]
         public void Pattern3()
@@ -367,6 +364,103 @@ namespace TranscriptionChecker.Test.Unit
             string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "G", "G", "G", "G", "H" };
 
             string[] expected = { "A B", "D E", "G G G G H" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TwoSegments()
+        {
+            string[] refArray = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
+            string[] evalArray = { "A", "B", "C", "D", "E", "O", "G", "H", "I", "J", "K", "L" };
+
+            string[] expected = { "A B C D E", "G H I J K L"};
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+        }
+
+
+        [TestMethod]
+        public void TwoSegmentsRefLeadingRepSep()
+        {
+            string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
+            string[] evalArray = { "A", "B", "O", "G", "H", "I", "J", "K", "L" };
+
+            string[] expected = { "A B", "G H I J K L" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TwoSegmentsRefTrailingingRepSep()
+        {
+            string[] refArray = { "A", "B", "C", "D", "E", "F", "F", "F", "F", "F", "K", "L" };
+            string[] evalArray = { "A", "B", "C", "D", "E", "O", "K", "L" };
+
+            string[] expected = { "A B C D E", "K L" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TwoSegmentsEvalLeadingRepSep()
+        {
+            string[] refArray = { "A", "B", "E", "F", "G", "H", "I", "J", "K", "L" };
+            string[] evalArray = { "A", "B", "E", "E", "E", "O", "G", "H", "I", "J", "K", "L" };
+
+            string[] expected = { "A B E", "G H I J K L" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TwoSegmentsEvaltRAILINGRepSep()
+        {
+            string[] refArray = { "A", "B", "C", "D", "E", "F", "Q", "H", "I", "J", "K", "L" };
+            string[] evalArray = { "A", "B", "C", "D", "E", "O", "G", "G", "G", "G", "K", "L" };
+
+            string[] expected = { "A B C D E", "K L" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+        }
+
+        [TestMethod]
+        public void ThreeSegments()
+        {
+            string[] refArray = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
+            string[] evalArray = { "A", "B", "C", "D", "E", "O", "G", "H", "I", "J", "K", "L" };
+
+            string[] expected = { "A B C D E", "G H I J K L" };
 
             string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
 
