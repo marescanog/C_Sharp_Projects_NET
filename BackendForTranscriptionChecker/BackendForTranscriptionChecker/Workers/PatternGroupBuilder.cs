@@ -20,10 +20,10 @@ namespace BackendForTranscriptionChecker.Workers
             List<string> dynaRefArray = refArray.ToList();
 
             /* Input Values here to check for reference
-            string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
-            string[] evalArray = { "A", "B", "O", "G", "H", "I", "J", "K", "L", "F" };
+            string[] refArray = { "A", "B", "E", "F", "G", "H", "I", "J", "K", "L" };
+            string[] evalArray = { "A", "B", "E", "E", "E", "O", "G", "H", "I", "J", "K", "L" };
 
-            string[] expected = { "A B", "G H I J K L" };
+            string[] expected = { "A B E", "G H I J K L" };
             */
 
             for (int i = 0, k = 0; i <= correctWords.Length;)

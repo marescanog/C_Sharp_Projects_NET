@@ -240,5 +240,17 @@ namespace TranscriptionChecker.Test.Unit
 
             Assert.IsTrue(arrayPattern == "A B I");
         }
+
+        [TestMethod]
+        public void TwoSegmentsEvalLeadingTruRepSep()
+        {
+            string[] refArray = { "A", "B", "E", "F", "G", "H", "I", "J", "K", "L" };
+            string[] evalArray = { "A", "B", "E", "E", "E", "O", "G", "H", "I", "J", "K", "L" };
+
+            string[] check = _crossChecker.GetCorrectWords(refArray, evalArray);
+            string arrayPattern = String.Join(Constants.space, check);
+
+            Assert.IsTrue(arrayPattern == "A B E H I J K L");
+        }
     }
 }

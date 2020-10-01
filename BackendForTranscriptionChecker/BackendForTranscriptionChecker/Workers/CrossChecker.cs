@@ -7,7 +7,6 @@ namespace BackendForTranscriptionChecker.Workers
     class CrossChecker
     {
         List<string> correctWords = new List<string>();
-        List<string> missingFromRef = new List<string>();
 
         public string[] GetCorrectWords(string[] refArray, string[] evalArray)
         {
