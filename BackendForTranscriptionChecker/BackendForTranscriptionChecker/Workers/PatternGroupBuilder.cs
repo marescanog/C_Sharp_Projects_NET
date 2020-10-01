@@ -18,6 +18,13 @@ namespace BackendForTranscriptionChecker.Workers
             string[] correctWords = _crossChecker.GetCorrectWords(refArray, evalArray);
             List<string> dynaRefArray = refArray.ToList();
 
+            /* Input Values here to check for reference
+            string[] refArray = { "A", "B", "C", "D", "E" };
+            string[] evalArray = { "F", "B", "C", "D", "E" };
+            string[] correctWords = {"B" "C" "D" "E"}
+            string[] expected = { "B C D E" };
+            */
+
             for (int i = 0, k = 0; i <= correctWords.Length;)
             {
                 if (i == correctWords.Length)
@@ -27,36 +34,23 @@ namespace BackendForTranscriptionChecker.Workers
                 }
                 else if (correctWords[i] == evalArray[k])
                 {
+                    // Detects if there are leading strings in Reference Array
                     int keyIndex = dynaRefArray.IndexOf(correctWords[i]);
-
                     if (keyIndex > 0 && groupedWords.Count !=0)
                     {
-                        int repCount = 0;
-
                         ResetList();
+
                         dynaRefArray.RemoveRange(0, keyIndex);
 
-                        if (k + 1 != evalArray.Length && evalArray[k].Equals(evalArray[k + 1], StringComparison.OrdinalIgnoreCase)) // Detects if there are repetitions
+                        // Detects if there are repetitions in eval Array
+                        if (k + 1 != evalArray.Length && evalArray[k].Equals(evalArray[k + 1], StringComparison.OrdinalIgnoreCase))
                         {
-                            //Counts number of  back to back repeititons forwards
-                            for (int rep = k; rep < evalArray.Length; rep++)
-                            {
-                                if (rep + 1 != evalArray.Length)
-                                {
-                                    if(evalArray[rep].Equals(evalArray[rep + 1], StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        repCount++;
-                                    }
-                                    else
-                                    {
-                                        break;
-                                    }
-                                }
-                            }
+                            int evalRepCount = CountRepetitionsInArrayAtCurrentIndex(evalArray, k);
+                            int correctWordRepCount = CountRepetitionsInArrayAtCurrentIndex(correctWords, i);
+                            int repCount = evalRepCount - correctWordRepCount;
 
-
+                            //Adjusts eval array index to take note of repeitions
                             k = k + repCount;
-
                         }
                     }
 
@@ -87,6 +81,27 @@ namespace BackendForTranscriptionChecker.Workers
             }
 
             return listOfGroupedWords.ToArray();
+        }
+
+        private static int CountRepetitionsInArrayAtCurrentIndex(string[] array, int currentIndex)
+        {
+            int repCount = 0;
+
+            for (int i = currentIndex; i < array.Length; i++)
+            {
+                if (i + 1 != array.Length)
+                {
+                    if (array[i].Equals(array[i + 1], StringComparison.OrdinalIgnoreCase))
+                    {
+                        repCount++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            return repCount;
         }
 
         private void ResetList()

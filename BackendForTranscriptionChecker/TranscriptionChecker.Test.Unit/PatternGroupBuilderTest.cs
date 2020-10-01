@@ -42,13 +42,13 @@ namespace TranscriptionChecker.Test.Unit
             }
         }
 
-        /* tO do LATER
+        [TestMethod]
         public void AllWrong()
         {
             string[] refArray = { "A", "B", "C", "D", "E" };
             string[] evalArray = { "F", "F", "F", "F", "F" };
 
-            string[] expected = { "A B C D E" };
+            string[] expected = { };
 
             string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
 
@@ -57,9 +57,212 @@ namespace TranscriptionChecker.Test.Unit
                 Assert.IsTrue(expected[i] == generatedPattern[i]);
             }
         }
-        */
+
         [TestMethod]
-        public void TwoBreaksInThePattern()
+        public void OneMistakePos1AllDifferent()
+        {
+            string[] refArray = { "A", "B", "C", "D", "E" };
+            string[] evalArray = { "F", "B", "C", "D", "E" };
+
+            string[] expected = { "B C D E" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+
+        }
+
+        [TestMethod]
+        public void OneMistakePos2AllDifferent()
+        {
+            string[] refArray = { "A", "B", "C", "D", "E" };
+            string[] evalArray = { "A", "F", "C", "D", "E" };
+
+            string[] expected = { "A", "C D E" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+
+        }
+
+        [TestMethod]
+        public void OneMistakePos3AllDifferent()
+        {
+            string[] refArray = { "A", "B", "C", "D", "E" };
+            string[] evalArray = { "A", "B", "F", "D", "E" };
+
+            string[] expected = { "A B", "D E" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+
+        }
+
+        [TestMethod]
+        public void OneMistakePos4AllDifferent()
+        {
+            string[] refArray = { "A", "B", "C", "D", "E" };
+            string[] evalArray = { "A", "B", "C", "F", "E" };
+
+            string[] expected = { "A B C", "E"};
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+        }
+
+        [TestMethod]
+        public void OneMistakePos5AllDifferent()
+        {
+            string[] refArray = { "A", "B", "C", "D", "E" };
+            string[] evalArray = { "A", "B", "C", "D", "F" };
+
+            string[] expected = { "A B C D" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+
+        }
+
+        [TestMethod]
+        public void TwoMistakeAllDifferent()
+        {
+            string[] refArray = { "A", "B", "C", "D", "E" };
+            string[] evalArray = { "F", "F", "C", "D", "E" };
+
+            string[] expected = { "C D E" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+
+        }
+
+        [TestMethod]
+        public void ThreeMistakeAllDifferent()
+        {
+            string[] refArray = { "A", "B", "C", "D", "E" };
+            string[] evalArray = { "F", "F", "F", "D", "E" };
+
+            string[] expected = { "D E" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+
+        }
+
+        [TestMethod]
+        public void FourMistakeAllDifferent()
+        {
+            string[] refArray = { "A", "B", "C", "D", "E" };
+            string[] evalArray = { "F", "F", "F", "F", "E" };
+
+            string[] expected = { "E" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+
+        }
+
+        [TestMethod]
+        public void RepetitivePattern()
+        {
+            string[] refArray = { "A", "B", "A", "B", "A" };
+            string[] evalArray = { "A", "B", "A", "F", "A" };
+
+            string[] expected = { "A B A", "A" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+
+        }
+
+        [TestMethod]
+        public void RepetitivePatternComplex()
+        {
+            string[] refArray = { "A", "B", "A", "B", "D", "A", "B", "F" };
+            string[] evalArray = { "A", "B", "A", "F", "A", "B" };
+
+            string[] expected = { "A B A", "A B" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+
+        }
+
+        [TestMethod]
+        public void RepetitivePatternComplex2()
+        {
+            string[] refArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
+            string[] evalArray = { "A", "B", "A", "F", "A", "B" };
+
+            string[] expected = { "B A", "A B"};
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+
+        }
+
+        [TestMethod]
+        public void RepetitivePatternComplex3()
+        {
+            string[] refArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
+            string[] evalArray = { "B", "A", "F", "A", "B" };
+
+            string[] expected = { "B A", "A B" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+
+        }
+        
+        [TestMethod]
+        public void Pattern1()
         {
             string[] refArray = { "A", "B", "C", "D", "E" };
             string[] evalArray = { "A", "B", "F", "D", "E" };
@@ -76,7 +279,7 @@ namespace TranscriptionChecker.Test.Unit
 
         
         [TestMethod]
-        public void CheckthisBreaksInThePattern() //check this later
+        public void Pattern2()
         {
             string[] refArray = { "A", "B", "C", "D", "E", "F", "G", "H" };
             string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "H" };
@@ -94,7 +297,7 @@ namespace TranscriptionChecker.Test.Unit
         
 
         [TestMethod]
-        public void ThreeBreaksInThePattern()
+        public void Pattern3()
         {
             string[] refArray = { "A", "B", "C", "D", "E", "F", "G", "H" };
             string[] evalArray = { "A", "B", "F", "D", "E", "X", "G", "H" };
@@ -110,7 +313,7 @@ namespace TranscriptionChecker.Test.Unit
         }
 
         [TestMethod]
-        public void ThreeBreaksInThePatternFirstBreakHas2DroppedWords()
+        public void Pattern4()
         {
             string[] refArray = { "A", "B", "C", "C", "D", "E", "F", "G", "H" };
             string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "H" };
@@ -126,12 +329,44 @@ namespace TranscriptionChecker.Test.Unit
         }
 
         [TestMethod]
-        public void ThreeBreaksInThePatternFirstBreakHas2DroppedWordsandEvalArrayhas2AddedWordinSecondBreak()
+        public void Pattern5()
         {
             string[] refArray = { "A", "B", "C", "C", "D", "E", "F", "G", "H" };
             string[] evalArray = { "A", "B", "F", "D", "E", "G", "G","G", "H" };
 
             string[] expected = { "A B", "D E", "G H" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+        }
+
+        [TestMethod]
+        public void Pattern6()
+        {
+            string[] refArray = { "A", "B", "C", "C", "D", "E", "F", "G", "G", "H" };
+            string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "G", "G", "H" };
+
+            string[] expected = { "A B", "D E", "G G H" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+        }
+
+        [TestMethod]
+        public void Pattern7()
+        {
+            string[] refArray = { "A", "B", "C", "C", "D", "E", "F", "G", "G", "G", "G", "H" };
+            string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "G", "G", "G", "G", "H" };
+
+            string[] expected = { "A B", "D E", "G G G G H" };
 
             string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
 

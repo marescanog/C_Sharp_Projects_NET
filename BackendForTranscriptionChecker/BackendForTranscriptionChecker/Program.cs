@@ -31,9 +31,11 @@ namespace BackendForTranscriptionChecker
                 //string[] refArray = { "A", "B", "C", "D", "E" };
                 //string[] evalArray = { "A", "B", "C", "D", "E" };
 
-                string[] refArray = { "A", "B", "C", "C", "D", "E", "F", "G", "H" };
-                string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "G", "H" };
+                //string[] refArray = { "A", "B", "C", "C", "D", "E", "F", "G", "H" };
+                //string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "G", "H" };
 
+                string[] refArray = { "A", "B", "C", "D", "E" };
+                string[] evalArray = { "F", "B", "C", "D", "E" };
 
                 //string expectedOutCome = "(.*) A A B (.*) (.*) (.*) (.*) (.*)";
                 string expectedOutComeCrossCheck = "\nA\nA B\n";
