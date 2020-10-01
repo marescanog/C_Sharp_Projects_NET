@@ -74,9 +74,9 @@ namespace TranscriptionChecker.Test.Unit
             }
         }
 
-        /*
+        
         [TestMethod]
-        public void checkthisBreaksInThePattern() //check this later
+        public void CheckthisBreaksInThePattern() //check this later
         {
             string[] refArray = { "A", "B", "C", "D", "E", "F", "G", "H" };
             string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "H" };
@@ -90,7 +90,7 @@ namespace TranscriptionChecker.Test.Unit
                 Assert.IsTrue(expected[i] == generatedPattern[i]);
             }
         }
-        */
+        
         
 
         [TestMethod]
@@ -98,6 +98,38 @@ namespace TranscriptionChecker.Test.Unit
         {
             string[] refArray = { "A", "B", "C", "D", "E", "F", "G", "H" };
             string[] evalArray = { "A", "B", "F", "D", "E", "X", "G", "H" };
+
+            string[] expected = { "A B", "D E", "G H" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+        }
+
+        [TestMethod]
+        public void ThreeBreaksInThePatternFirstBreakHas2DroppedWords()
+        {
+            string[] refArray = { "A", "B", "C", "C", "D", "E", "F", "G", "H" };
+            string[] evalArray = { "A", "B", "F", "D", "E", "G", "G", "H" };
+
+            string[] expected = { "A B", "D E", "G H" };
+
+            string[] generatedPattern = _patternGroupBuilder.GroupSuccessiveCorrectWords(refArray, evalArray);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.IsTrue(expected[i] == generatedPattern[i]);
+            }
+        }
+
+        [TestMethod]
+        public void ThreeBreaksInThePatternFirstBreakHas2DroppedWordsandEvalArrayhas2AddedWordinSecondBreak()
+        {
+            string[] refArray = { "A", "B", "C", "C", "D", "E", "F", "G", "H" };
+            string[] evalArray = { "A", "B", "F", "D", "E", "G", "G","G", "H" };
 
             string[] expected = { "A B", "D E", "G H" };
 

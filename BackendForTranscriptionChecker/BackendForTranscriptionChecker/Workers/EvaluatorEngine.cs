@@ -9,7 +9,7 @@ namespace BackendForTranscriptionChecker.Workers
 
     class EvaluatorEngine
     {
-        RegExPatternCreator _regExPatternCreator;
+        private readonly RegExPatternCreator _regExPatternCreator;
 
         public EvaluatorEngine(RegExPatternCreator regExPatternCreator)
         {
@@ -82,7 +82,7 @@ namespace BackendForTranscriptionChecker.Workers
         private List<string> CaptureSegment(int currentIndex, List<string> list)
         {
             List<string> temp = new List<string>();
-            int maxIndexforSegment = createSegmentIndex(currentIndex, list);
+            int maxIndexforSegment = CreateSegmentIndex(currentIndex, list);
 
             for(int i=currentIndex; i <= maxIndexforSegment; i++)
             {
@@ -92,12 +92,12 @@ namespace BackendForTranscriptionChecker.Workers
             return temp;
         }
 
-        private int createSegmentIndex(int currentIndex, List<string> list)
+        private int CreateSegmentIndex(int currentIndex, List<string> list)
         {
-            return isTail(currentIndex, list) ? list.Count() - 1 : currentIndex + 6;
+            return IsTail(currentIndex, list) ? list.Count() - 1 : currentIndex + 6;
         }
 
-        private bool isTail(int currentIndex, List<string> list)
+        private bool IsTail(int currentIndex, List<string> list)
         {
             return !(list.Count() - 1 - currentIndex > 6);
         }
