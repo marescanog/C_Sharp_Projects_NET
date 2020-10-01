@@ -48,12 +48,7 @@ namespace BackendForTranscriptionChecker.Workers
                 }
                 else
                 {
-                    //Check for repititions in RefArray
-                    int evalRep = SeekForwardRepetitions(k, evalArray);
-                    if (evalRep > 0)
-                    {
-                        evalRep = CheckForwardForAnyMatches(processedRefArray, evalRep, k, evalArray[k]);
-                    }
+
 
                     if (i <= k)
                     {
@@ -94,18 +89,6 @@ namespace BackendForTranscriptionChecker.Workers
             return correctWords.ToArray();
         }
 
-        private static int GetNumberOfRepetitions(int currentIndex, string[]array1, string[]array2)
-        {
-            int repetitions = 0;
-            if (IsRepeating(currentIndex, array1))
-            {
-                repetitions = SeekForwardRepetitions(currentIndex, array1);
-                repetitions = CheckForwardForAnyMatches(array2, repetitions, currentIndex, array1[currentIndex]);
-            }
-
-            return repetitions;
-        }
-
         private static string[] GetMissingWordsFromArray(string[] refArray, string[] evalArray)
         {
             string[] intersection = refArray.Intersect(evalArray).ToArray();
@@ -136,6 +119,18 @@ namespace BackendForTranscriptionChecker.Workers
         private static bool IsRepeating(int currentIndex, string[] array)
         {
             return (!array[currentIndex].Equals(Constants.delimiter) && currentIndex + 1 != array.Length && array[currentIndex].Equals(array[currentIndex + 1], StringComparison.OrdinalIgnoreCase));
+        }
+
+        private static int GetNumberOfRepetitions(int currentIndex, string[]array1, string[]array2)
+        {
+            int repetitions = 0;
+            if (IsRepeating(currentIndex, array1))
+            {
+                repetitions = SeekForwardRepetitions(currentIndex, array1);
+                repetitions = CheckForwardForAnyMatches(array2, repetitions, currentIndex, array1[currentIndex]);
+            }
+
+            return repetitions;
         }
 
         private static int SeekForwardRepetitions(int currentIndex, string[] array)
