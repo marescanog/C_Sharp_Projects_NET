@@ -15,10 +15,10 @@ namespace BackendForTranscriptionChecker.Workers
             string[] missingwords = GetMissingWordsFromArray(refArray, evalArray);
             string[] processedRefArray = (missingwords.Length != 0) ? ReplaceMissingWordsWithDelimter(refArray, missingwords): refArray;
             /*
-            string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
-            string[] evalArray = { "A", "B", "B", "B", "B", "I", "I", "I", "I", "F" };
+            string[] refArray = { "A", "B", "E", "F", "G", "H", "I", "J", "K", "L" };
+            string[] evalArray = { "A", "B", "E", "E", "E", "O", "G", "H", "I", "J", "K", "L" };
 
-                string[] Expected = {"A B"}
+                string[] Expected = "A B E H I J K L");
             */
 
             for (int i = 0, k = 0; i <= maxRef || k <= maxEval;)
@@ -48,13 +48,17 @@ namespace BackendForTranscriptionChecker.Workers
                 }
                 else
                 {
+                    //Check for repititions in RefArray
+                    int evalRep = SeekForwardRepetitions(k, evalArray);
+                    if (evalRep > 0)
+                    {
+                        evalRep = CheckForwardForAnyMatches(processedRefArray, evalRep, k, evalArray[k]);
+                    }
+
                     if (i <= k)
                     {
-                        int repetitions = SeekForwardRepetitions(i, processedRefArray);
-                        if(repetitions>0)
-                        {
-                            repetitions = CheckForwardForAnyMatches(evalArray, repetitions, i, processedRefArray[i]);
-                        }
+                        //Check for repititions in RefArray
+                        int repetitions = GetNumberOfRepetitions(i, processedRefArray, evalArray);
 
                         if ((i == maxRef) && (k == maxEval))
                         {
@@ -90,19 +94,51 @@ namespace BackendForTranscriptionChecker.Workers
             return correctWords.ToArray();
         }
 
-        private static int CheckForwardForAnyMatches(string[] evalArray, int repetitions, int currentIndex, string word)
+        private static int GetNumberOfRepetitions(int currentIndex, string[]array1, string[]array2)
         {
-            for (int i = currentIndex; i< currentIndex + repetitions; i++ )
+            int repetitions = 0;
+            if (IsRepeating(currentIndex, array1))
             {
-                if(evalArray[i].Equals(word, StringComparison.OrdinalIgnoreCase))
-                {
-                    repetitions--;
-                }
+                repetitions = SeekForwardRepetitions(currentIndex, array1);
+                repetitions = CheckForwardForAnyMatches(array2, repetitions, currentIndex, array1[currentIndex]);
             }
+
             return repetitions;
         }
 
-        private int SeekForwardRepetitions(int currentIndex, string[] array)
+        private static string[] GetMissingWordsFromArray(string[] refArray, string[] evalArray)
+        {
+            string[] intersection = refArray.Intersect(evalArray).ToArray();
+
+            if (intersection.Length != 0)
+            {
+                foreach (string word in intersection)
+                {
+                    refArray = refArray.Where(val => val != word).ToArray();
+                }
+
+                return refArray.Intersect(refArray).ToArray();
+            }
+
+            return intersection;
+        }
+
+        private static string[] ReplaceMissingWordsWithDelimter(string[] refArray, string[] missingWords)
+        {
+            foreach (var word in missingWords)
+            {
+                refArray = refArray.Select(x => x.Replace(word, Constants.delimiter)).ToArray();
+            }
+
+            return refArray;
+        }
+
+        private static bool IsRepeating(int currentIndex, string[] array)
+        {
+            return (!array[currentIndex].Equals(Constants.delimiter) && currentIndex + 1 != array.Length && array[currentIndex].Equals(array[currentIndex + 1], StringComparison.OrdinalIgnoreCase));
+        }
+
+        private static int SeekForwardRepetitions(int currentIndex, string[] array)
         {
             int count = 0;
             for (int i= currentIndex; i<array.Length; i++)
@@ -119,32 +155,21 @@ namespace BackendForTranscriptionChecker.Workers
             return count;
         }
 
-        private static string[] ReplaceMissingWordsWithDelimter(string[] refArray, string[] missingWords)
+        private static int CheckForwardForAnyMatches(string[] evalArray, int repetitions, int currentIndex, string word)
         {
-            foreach(var word in missingWords)
+            for (int i = currentIndex; i < currentIndex + repetitions; i++)
             {
-                refArray = refArray.Select(x => x.Replace(word, Constants.delimiter)).ToArray();
-            }
-
-            return refArray;
-        }
-
-        private static string[] GetMissingWordsFromArray(string[] refArray, string[] evalArray)
-        {
-            string[] intersection = refArray.Intersect(evalArray).ToArray();
-
-            if(intersection.Length!=0)
-            {
-                foreach (string word in intersection)
+                if (evalArray[i].Equals(word, StringComparison.OrdinalIgnoreCase))
                 {
-                    refArray = refArray.Where(val => val != word).ToArray();
+                    repetitions--;
                 }
-
-                return refArray.Intersect(refArray).ToArray();
             }
-
-            return intersection;
+            return repetitions;
         }
+
+        
+
+        
 
     }
 }

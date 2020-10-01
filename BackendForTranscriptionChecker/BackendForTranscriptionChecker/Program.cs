@@ -47,8 +47,11 @@ namespace BackendForTranscriptionChecker
                 //Console.WriteLine("ExpctPattern: {0}", expectedOutComeCrossCheck);
                 //Console.WriteLine("ActualPattern: ");
 
-                string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
-                string[] evalArray = { "A", "B", "B", "B", "B", "I", "I", "I", "I", "F" };
+                //string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
+                //string[] evalArray = { "A", "B", "B", "B", "B", "I", "I", "I", "I", "F" };
+
+                string[] refArray = { "A", "B", "E", "F", "G", "H", "I", "J", "K", "L" };
+                string[] evalArray = { "A", "B", "E", "E", "E", "O", "G", "H", "I", "J", "K", "L" };
 
                 string[] correctWords = _crossChecker.GetCorrectWords(refArray, evalArray);
 
