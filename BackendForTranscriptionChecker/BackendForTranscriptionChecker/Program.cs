@@ -56,9 +56,6 @@ namespace BackendForTranscriptionChecker
                 string[] evalArray = { "E", "O", "G", "H", "I", "J", "K", "L", "F" };
                 */
 
-                SubsequenceProcessor _stringProcessor = new SubsequenceProcessor();
-                SubsequenceValidator _subsequenceValidator = new SubsequenceValidator();
-
                 //string[] refArray = { "G", "H", "I", "J", "K", "L", "O", "P", "Q" };
                 //string[] evalArray = { "E", "O", "G", "H", "I", "J", "K", "L", "F" };
                 //string[] refArray = { "G", "H", "I", "J", "K", "L", "O", "P", "Q", "E", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P" };
@@ -69,19 +66,14 @@ namespace BackendForTranscriptionChecker
 
                 Console.WriteLine("The original text");
                 Console.WriteLine("{0} \n", String.Join(" ", refArray));
-                Console.WriteLine("The original text");
+                Console.WriteLine("The modified text");
                 Console.WriteLine("{0} \n", String.Join(" ", evalArray));
-                _stringProcessor.ProcessMatch(refArray, evalArray);
-                List<Subsequence> listOfSubSequence = _stringProcessor.GetListOfSubsequences();
 
-                Console.WriteLine("Subsequences");
-                foreach (var sub in listOfSubSequence)
-                {
-                    Console.WriteLine(sub.GetString());
-                }
-                Console.WriteLine("\n\n");
-                _subsequenceValidator.ValidateListofSubsequences(listOfSubSequence, refArray, evalArray);
-                //Console.WriteLine(String.Join(" ", correctWords));
+                CorrectWordGroupListGenerator _correctWordGroupListGenerator = new CorrectWordGroupListGenerator();
+
+                string[] correctWord = _correctWordGroupListGenerator.GetGroupOfSuccessiveCorrectWords(refArray, evalArray);
+
+                Console.WriteLine(String.Join(" ", correctWord));
 
 
 
