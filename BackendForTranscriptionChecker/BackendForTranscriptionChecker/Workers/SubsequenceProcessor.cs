@@ -16,53 +16,64 @@ namespace BackendForTranscriptionChecker
             listOfSubSequences.Clear();
             subsequence.Clear();
 
+            Subsequence temp = new Subsequence(subsequence);
+            int icounter = 0;
+
             for (int i=0; i<refArray.Length; i++)
             {
-
-                int icounter = 0;
                 for (int j=0; j<evalArray.Length; j++)
                 {
-                    if( refArray[i + icounter].Equals(evalArray[j], StringComparison.OrdinalIgnoreCase))
+                    if(i + icounter < refArray.Length && refArray[i + icounter].Equals(evalArray[j], StringComparison.OrdinalIgnoreCase))
                     {
-                        if (i + icounter < refArray.Length -1)
+                        if (i + icounter < refArray.Length )
                         {
                             subsequence.Add(refArray[i + icounter]);
                             icounter++;
                         }
-                        
-                        
                     }
                     else if(subsequence.Count != 0)
                     {
-                        Subsequence temp = new Subsequence(subsequence);
-                        bool hasSubsequence = false;
-
-                        if (listOfSubSequences.Count != 0)
-                        {
-                            for (int subIn = 0; subIn < listOfSubSequences.Count; subIn++)
-                            {
-                                if (temp.GetString().Equals(listOfSubSequences[subIn].GetString(), StringComparison.OrdinalIgnoreCase))
-                                {
-                                    hasSubsequence = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if(!hasSubsequence || listOfSubSequences.Count == 0)
-                        {
-                            listOfSubSequences.Add(new Subsequence(subsequence));
-                        }
-
+                        AddSubsequenceInList(temp);
                         subsequence.Clear();
                         icounter = 0;
                     }
-                    
                 }
-                subsequence.Clear();
+
+                if (subsequence.Count != 0)
+                {
+                    AddSubsequenceInList(temp);
+                    subsequence.Clear();
+                }
+
+                icounter = 0;
             }
 
+            //OutSideForLoop
             SortListOfSubSequences();
+        }
+
+        private void AddSubsequenceInList(Subsequence temp)
+        {
+            if ((!HasSubsequenceInList(temp) || listOfSubSequences.Count == 0) && subsequence.Count != 0)
+            {
+                listOfSubSequences.Add(new Subsequence(subsequence));
+            }
+        }
+
+        private bool HasSubsequenceInList(Subsequence temp)
+        {
+            bool hasSubsequence = false;
+
+            for (int subIn = 0; subIn < listOfSubSequences.Count; subIn++)
+            {
+                if (temp.GetString().Equals(listOfSubSequences[subIn].GetString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    hasSubsequence = true;
+                    break;
+                }
+            }
+
+            return hasSubsequence;
         }
 
         private Subsequence GetLongestSubsequence(List<Subsequence> subsequenceList)

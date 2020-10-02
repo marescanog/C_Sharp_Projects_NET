@@ -16,7 +16,7 @@ namespace BackendForTranscriptionChecker.Workers
         {
             _subsequenceProcessor.ProcessMatch(refArray, evalArray);
             List<Subsequence> subsequenceList = _subsequenceProcessor.GetListOfSubsequences();
-            List<Subsequence> validSubSeqEvalArray = _subsequenceValidator.ValidateListofSubsequences(subsequenceList, evalArray);
+            List<Subsequence> validSubSeqEvalArray = _subsequenceValidator.ValidateListofSubsequences(subsequenceList, refArray, evalArray);
             List<string> correctWords = new List<string>();
 
             foreach (var sub in validSubSeqEvalArray)

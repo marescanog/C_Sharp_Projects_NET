@@ -7,21 +7,27 @@ namespace BackendForTranscriptionChecker.Workers
 {
     class SubsequenceValidator
     {
-        public List<Subsequence> ValidateListofSubsequences(List<Subsequence> listofSubsequences, string[] array)
+        public List<Subsequence> ValidateListofSubsequences(List<Subsequence> listofSubsequences, string[] refArray, string[] evalArray)
         {
             List<Subsequence> validSubsequenceList = new List<Subsequence>();
             MatchCollection matches;
-            string test = String.Join(Constants.space, array);
+            MatchCollection matchesRef;
+
+            string evalArrayText = String.Join(Constants.space, evalArray);
+            string refArrayText = String.Join(Constants.space, evalArray);
+
             try
             {
                 for (int i=0; i < listofSubsequences.Count;i++)
                 {
-                    matches = Regex.Matches(test, listofSubsequences[i].GetString());
+                    matches = Regex.Matches(evalArrayText, listofSubsequences[i].GetString());
+                    matchesRef = Regex.Matches(refArrayText, listofSubsequences[i].GetString());
+
 
                     if (matches.Count != 0)
                     {
                         validSubsequenceList.Add(listofSubsequences[i]);
-                        test = Regex.Replace(test, listofSubsequences[i].GetString(), string.Empty, RegexOptions.None, TimeSpan.FromSeconds(.25));
+                        evalArrayText = Regex.Replace(evalArrayText, listofSubsequences[i].GetString(), string.Empty, RegexOptions.None, TimeSpan.FromSeconds(.25));
                     }
                 }
             }
