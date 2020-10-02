@@ -54,7 +54,14 @@ namespace BackendForTranscriptionChecker.Workers
                 }
                 else
                 {
-                    /*Adjusted Code Almost There
+                    /*
+                    string[] refArray = { "A", "B", "F", "E", "E","G", "H", "I", "J", "K", "L", "O" };
+                    string[] evalArray = { "A", "B", "E","E","E","O", "G", "H", "I", "J", "K", "L", "F" }; // index should be 4, add another check for F, it gives back 12, 12
+
+                    string[] Expected = "A B E H I J K L");
+                    */
+                    
+                    /*
                     if (IsRepeating(k, evalArray))
                     {
                         //EvalIndexIskey
@@ -62,33 +69,43 @@ namespace BackendForTranscriptionChecker.Workers
 
                         int evalRep = SeekForwardRepetitions(k, evalArray);
                         int indexOfNextNonRepeatingString = k + evalRep + 1;
+
+                        //checkwhen is the next E found
                         int nextIndexEvalfArray = k + evalRep + 1;
-                        int refIndexSuccessfulSeach;
+                        int indexOfEvalMatchedRef = dynaProcessedRefArray.IndexOf(evalArray[k], i);
 
-                        for (int start = 0; start< evalArray.Length- indexOfNextNonRepeatingString; start++)
+                        if(nextIndexEvalfArray >= indexOfEvalMatchedRef)
                         {
-                            //check if this word is in Ref Array
-                            refIndexSuccessfulSeach = dynaProcessedRefArray.IndexOf(evalArray[nextIndexEvalfArray], i);
-
-                            //Add to Disctionary
-                            if (refIndexSuccessfulSeach != -1)
-                            {
-                                pairIndexes.Add(nextIndexEvalfArray, refIndexSuccessfulSeach);
-                            }
-                            nextIndexEvalfArray++;
+                            i = indexOfEvalMatchedRef;
                         }
+                        else
+                        {
+                            int refIndexSuccessfulSeach;
 
-                        Dictionary<int, double> evalIndexPairCoordinate = _vectorDistanceCalculator.ComputeCoordinates(pairIndexes);
+                            for (int start = 0; start < evalArray.Length - indexOfNextNonRepeatingString; start++)
+                            {
+                                //check if this word is in Ref Array
+                                refIndexSuccessfulSeach = dynaProcessedRefArray.IndexOf(evalArray[nextIndexEvalfArray], i);
 
-                        k = evalIndexPairCoordinate.Aggregate((l, r) => l.Value < r.Value ? l : r).Key;
+                                //Add to Disctionary
+                                if (refIndexSuccessfulSeach != -1)
+                                {
+                                    pairIndexes.Add(nextIndexEvalfArray, refIndexSuccessfulSeach);
+                                }
+                                nextIndexEvalfArray++;
+                            }
 
-                        i = dynaProcessedRefArray.IndexOf(evalArray[k], i);
+                            Dictionary<int, double> evalIndexPairCoordinate = _vectorDistanceCalculator.ComputeCoordinates(pairIndexes);
 
-                        Console.WriteLine("Test");
+                            k = evalIndexPairCoordinate.Aggregate((l, r) => l.Value < r.Value ? l : r).Key;
+
+                            i = dynaProcessedRefArray.IndexOf(evalArray[k], i);
+
+                            Console.WriteLine("Test");
+                        }
                     }
                     */
                     
-
                     if (i <= k)
                     {
                         //Check for repititions in RefArray
