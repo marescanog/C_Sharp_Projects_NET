@@ -9,17 +9,21 @@ namespace BackendForTranscriptionChecker.Workers
         VectorDistanceCalculator _vectorDistanceCalculator = new VectorDistanceCalculator();
         List<string> correctWords = new List<string>();
         List<string> dynaProcessedRefArray = new List<string>();
+        List<string> dynaEvalArray = new List<string>();
+
+        List<string> refSegment = new List<string>();
+        List<string> evalSegment = new List<string>();
 
         public string[] GetCorrectWords(string[] refArray, string[] evalArray)
         {
             correctWords.Clear();
-            
+
             int maxRef = refArray.Length -1 , maxEval = evalArray.Length -1;
 
             string[] missingwords = GetMissingWordsFromArray(refArray, evalArray);
             string[] processedRefArray = (missingwords.Length != 0) ? ReplaceMissingWordsWithDelimter(refArray, missingwords): refArray;
             dynaProcessedRefArray = processedRefArray.ToList();
-
+            dynaEvalArray = evalArray.ToList();
             /*
             string[] refArray = { "A", "B", "F", "G", "H", "I", "J", "K", "L", "O" };
             string[] evalArray = { "A", "B", "E", "E", "E", "O", "G", "H", "I", "J", "K", "L", "F" }; // index should be 4, add another check for F, it gives back 12, 12
@@ -55,12 +59,26 @@ namespace BackendForTranscriptionChecker.Workers
                 else
                 {
                     /*
-                    string[] refArray = { "A", "B", "F", "E", "E","G", "H", "I", "J", "K", "L", "O" };
-                    string[] evalArray = { "A", "B", "E","E","E","O", "G", "H", "I", "J", "K", "L", "F" }; // index should be 4, add another check for F, it gives back 12, 12
+                    string[] refArray = { "G", "H", "I", "J", "K", "L", "O" };
+                    string[] evalArray = { "E","O", "G", "H", "I", "J", "K", "L", "F" }; // index should be 4, add another check for F, it gives back 12, 12
 
                     string[] Expected = "A B E H I J K L");
+
+                    string[] refArray = { "A", "B", "F", "E", "E","G", "H", "I", "J", "K", "L", "O"};
+                    string[] evalArray = { "A", "B", "E", "E", "E", "O", "G", "H", "I", "J", "K", "L", "F" };
                     */
-                    
+
+                    //checked if element G is nearby in evalArray H
+                    int num = dynaEvalArray.IndexOf(dynaProcessedRefArray[i]);
+                    //if index != -1
+                    //get the segment of F to O
+                    //Get the segment of E to F
+                    refSegment.Clear();
+                    evalSegment.Clear();
+
+                    //GetSegment(int startingIndex, int endingIndex, string[] arrayToSegment)
+                    refSegment = GetSegment(i, dynaEvalArray.Count, dynaEvalArray.ToArray());
+                    evalSegment = GetSegment(k, num, evalArray);                  
                     /*
                     if (IsRepeating(k, evalArray))
                     {
@@ -218,9 +236,17 @@ namespace BackendForTranscriptionChecker.Workers
             return repetitions;
         }
 
-        
+        private List<string> GetSegment(int startingIndex, int endingIndex, string[] arrayToSegment)
+        {
+            List<string> tempList = new List<string>();
 
-        
+            for (int i = startingIndex; i < endingIndex; i++)
+            {
+                tempList.Add(arrayToSegment[i]);
+            }
+
+            return tempList;
+        }        
 
     }
 }

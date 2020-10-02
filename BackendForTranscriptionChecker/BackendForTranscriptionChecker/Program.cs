@@ -1,4 +1,5 @@
-﻿using BackendForTranscriptionChecker.Workers;
+﻿using BackendForTranscriptionChecker.Objects;
+using BackendForTranscriptionChecker.Workers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,14 +51,38 @@ namespace BackendForTranscriptionChecker
                 //string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
                 //string[] evalArray = { "A", "B", "B", "B", "B", "I", "I", "I", "I", "F" };
 
-                
-                string[] refArray = { "A", "B", "F", "E", "E","G", "H", "I", "J", "K", "L", "O"};
-                string[] evalArray = { "A", "B", "E", "E", "E", "O", "G", "H", "I", "J", "K", "L", "F" };
+                /* Test this string
+                string[] refArray = { "G", "H", "I", "J", "K", "L", "O"};
+                string[] evalArray = { "E", "O", "G", "H", "I", "J", "K", "L", "F" };
+                */
 
-                string[] correctWords = _crossChecker.GetCorrectWords(refArray, evalArray);
+                SubsequenceProcessor _stringProcessor = new SubsequenceProcessor();
+                SubsequenceValidator _subsequenceValidator = new SubsequenceValidator();
 
-                Console.WriteLine(String.Join(" ", correctWords));
-                
+                //string[] refArray = { "G", "H", "I", "J", "K", "L", "O", "P", "Q" };
+                //string[] evalArray = { "E", "O", "G", "H", "I", "J", "K", "L", "F" };
+                //string[] refArray = { "G", "H", "I", "J", "K", "L", "O", "P", "Q", "E", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P" };
+                // string[] evalArray = { "E", "O", "G", "H", "I", "J", "K", "L", "F", "G", "Q", "P", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P" };
+
+                string[] refArray = {"The","quick","brown","fox","jumped","over","the","lazy","dog", "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog" };
+                string[] evalArray = { "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "fox", "jumped", "over", "the", "lazy", "dog" };
+
+                Console.WriteLine("The original text");
+                Console.WriteLine("{0} \n", String.Join(" ", refArray));
+                Console.WriteLine("The original text");
+                Console.WriteLine("{0} \n", String.Join(" ", evalArray));
+                _stringProcessor.ProcessMatch(refArray, evalArray);
+                List<Subsequence> listOfSubSequence = _stringProcessor.GetListOfSubsequences();
+
+                Console.WriteLine("Subsequences");
+                foreach (var sub in listOfSubSequence)
+                {
+                    Console.WriteLine(sub.GetString());
+                }
+                Console.WriteLine("\n\n");
+                _subsequenceValidator.ValidateListofSubsequences(listOfSubSequence, refArray, evalArray);
+                //Console.WriteLine(String.Join(" ", correctWords));
+
 
 
                 Console.WriteLine("End");
