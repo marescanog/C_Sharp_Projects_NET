@@ -51,6 +51,7 @@
     <Compile Include="Workers\FileReader.cs" />
     <Compile Include="Workers\PatternGroupBuilder.cs" />
     <Compile Include="Workers\RegExPatternCreator.cs" />
+    <Compile Include="Workers\VectorDistanceCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

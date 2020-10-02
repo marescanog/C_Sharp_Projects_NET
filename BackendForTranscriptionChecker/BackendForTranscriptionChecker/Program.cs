@@ -50,12 +50,14 @@ namespace BackendForTranscriptionChecker
                 //string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
                 //string[] evalArray = { "A", "B", "B", "B", "B", "I", "I", "I", "I", "F" };
 
-                string[] refArray = { "A", "B", "E", "F", "G", "H", "I", "J", "K", "L" };
-                string[] evalArray = { "A", "B", "E", "E", "E", "O", "G", "H", "I", "J", "K", "L" };
+                
+                string[] refArray = { "A", "B", "F", "G", "H", "I", "J", "K", "L", "O"};
+                string[] evalArray = { "A", "B", "E", "E", "E", "O", "G", "H", "I", "J", "K", "L", "F" };
 
                 string[] correctWords = _crossChecker.GetCorrectWords(refArray, evalArray);
 
                 Console.WriteLine(String.Join(" ", correctWords));
+                
 
 
                 Console.WriteLine("End");

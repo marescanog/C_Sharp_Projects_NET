@@ -10,12 +10,16 @@ namespace BackendForTranscriptionChecker.Workers
     class PatternGroupBuilder
     {
         private readonly CrossChecker _crossChecker = new CrossChecker();
+
         private List<string> groupedWords = new List<string>();
         private List<string> listOfGroupedWords = new List<string>();
         private int refArrayIndex = 0;
 
         public string[] GroupSuccessiveCorrectWords(string[] refArray, string[] evalArray)
         {
+            groupedWords.Clear();
+            listOfGroupedWords.Clear();
+
             string[] correctWords = _crossChecker.GetCorrectWords(refArray, evalArray);
             List<string> dynaRefArray = refArray.ToList();
 
