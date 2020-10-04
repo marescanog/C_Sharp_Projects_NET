@@ -2,121 +2,47 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace BackendForTranscriptionChecker
 {
     class SubsequenceProcessor
     {
-        List<Subsequence> listOfSubSequences = new List<Subsequence>();
-        List<string> subsequence = new List<string>();
-
-        public void ProcessMatch(string[] refArray, string[]evalArray)
+        public void GetListOfAllPossibleSubsequences(string[] refArray, string[] evalArray)
         {
-            
-            listOfSubSequences.Clear();
-            subsequence.Clear();
+            List<string> listOfAllPossibleSubsequences = new List<string>();
+            List<string> refList = refArray.ToList();
+            string sEvalString = String.Join(Constants.space, evalArray);
 
-            Subsequence temp = new Subsequence(subsequence);
-            int icounter = 0;
-
-            for (int i=0; i<refArray.Length; i++)
+            while (refList.Count > 0)
             {
-                for (int j=0; j<evalArray.Length; j++)
+                List<string> refListCopy = new List<string>(refList);
+                string refListString = String.Join(Constants.space, refListCopy);
+
+
+                while (refListCopy.Count > 0)
                 {
-                    if(i + icounter < refArray.Length && refArray[i + icounter].Equals(evalArray[j], StringComparison.OrdinalIgnoreCase))
+                    string sequence = String.Join(Constants.space, refListCopy);
+
+                    if (!listOfAllPossibleSubsequences.Contains(sequence, StringComparer.OrdinalIgnoreCase))
                     {
-                        if (i + icounter < refArray.Length )
+                        Match match = Regex.Match(sEvalString, sequence);
+
+                        if (match.Success)
                         {
-                            subsequence.Add(refArray[i + icounter]);
-                            icounter++;
+                            listOfAllPossibleSubsequences.Add(sequence);
                         }
                     }
-                    else if(subsequence.Count != 0)
-                    {
-                        AddSubsequenceInList(temp);
-                        subsequence.Clear();
-                        icounter = 0;
-                    }
+
+                    refListCopy.RemoveAt(refListCopy.Count - 1);
+
                 }
 
-                if (subsequence.Count != 0)
-                {
-                    AddSubsequenceInList(temp);
-                    subsequence.Clear();
-                }
-
-                icounter = 0;
+                refList.Remove(refList[0]);
             }
 
-            //OutSideForLoop
-            SortListOfSubSequences();
+            Console.WriteLine("Check");
         }
 
-        private void AddSubsequenceInList(Subsequence temp)
-        {
-            if ((!HasSubsequenceInList(temp) || listOfSubSequences.Count == 0) && subsequence.Count != 0)
-            {
-                listOfSubSequences.Add(new Subsequence(subsequence));
-            }
-        }
-
-        private bool HasSubsequenceInList(Subsequence temp)
-        {
-            bool hasSubsequence = false;
-
-            for (int subIn = 0; subIn < listOfSubSequences.Count; subIn++)
-            {
-                if (temp.GetString().Equals(listOfSubSequences[subIn].GetString(), StringComparison.OrdinalIgnoreCase))
-                {
-                    hasSubsequence = true;
-                    break;
-                }
-            }
-
-            return hasSubsequence;
-        }
-
-        private Subsequence GetLongestSubsequence(List<Subsequence> subsequenceList)
-        {
-            Subsequence longestSubsequence = new Subsequence(string.Empty);
-            int maxCount = int.MinValue;
-            foreach (var sequence in subsequenceList)
-            {
-                if(maxCount<sequence.GetValue())
-                {
-                    maxCount = sequence.GetValue();
-                    longestSubsequence = sequence;
-                }
-            }
-
-            return longestSubsequence;
-        }
-
-        private void SortListOfSubSequences()
-        {
-            Dictionary<Subsequence, int> tempList = new Dictionary<Subsequence, int>();
-            if (listOfSubSequences.Count != 0)
-            {
-                foreach(var sub in listOfSubSequences)
-                {
-                    tempList.Add(sub, sub.GetValue());
-                }
-
-                var sortedDict2 = from entry in tempList orderby entry.Value descending select entry;
-
-                listOfSubSequences.Clear();
-
-                foreach(var sub in sortedDict2)
-                {
-                    listOfSubSequences.Add(sub.Key);
-                }
-            }
-
-        }
-
-        public List<Subsequence> GetListOfSubsequences()
-        {
-            return listOfSubSequences;
-        }
     }
 }
