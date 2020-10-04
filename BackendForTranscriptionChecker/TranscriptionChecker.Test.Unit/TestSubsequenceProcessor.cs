@@ -133,7 +133,28 @@ namespace TranscriptionChecker.Test.Unit
             CollectionAssert.AreEqual(expectedList, processedactual);
         }
 
+        [TestMethod]
+        public void Pattern1()
+        {
+            string[] refArray = { "A", "B", "A", "F", "A", "B" };
+            string[] evalArray = { "D", "B", "A", "B", "A", "A", "B", "F"};
 
+            List<string> expectedList = new List<string>();
+            List<string> processedactual = _subsequenceProcessor.GetListOfAllPossibleSubsequences(refArray, evalArray);
+
+            expectedList.AddRange(new List<string>()
+            {
+                "A B A",
+                "A B",
+                "B A",
+                "A",
+                "B",
+                "F"
+            });
+
+            Sort(expectedList);
+            CollectionAssert.AreEqual(expectedList, processedactual);
+        }
 
 
         ///METHODS

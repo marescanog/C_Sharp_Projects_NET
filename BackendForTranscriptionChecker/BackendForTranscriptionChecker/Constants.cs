@@ -11,6 +11,6 @@
         public const string programError = "Application Encountered Error: ";
         public const string subValidator = "SUBSEQUENCE VALIDATOR: ";
         public const string subProcessor = "SUBSEQUENCE PROCESSOR: ";
-
+        public const string regexCaseInsensitive = "(?i)";
     }
 }

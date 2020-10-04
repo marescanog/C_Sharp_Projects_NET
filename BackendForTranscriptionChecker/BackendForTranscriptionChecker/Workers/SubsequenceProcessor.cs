@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -15,39 +16,9 @@ namespace BackendForTranscriptionChecker
 
             try
             {
-                while (refList.Count > 0)
-                {
-                    List<string> refListCopy = new List<string>(refList);
-
-                    while (refListCopy.Count > 0)
-                    {
-                        string sequence = String.Join(Constants.space, refListCopy);
-
-                        if (!listOfAllPossibleSubsequences.Contains(sequence, StringComparer.OrdinalIgnoreCase))
-                        {
-                            Match match = Regex.Match(sEvalString, sequence, RegexOptions.None, TimeSpan.FromSeconds(Constants.timeOutTime));
-
-                            if (match.Success)
-                            {
-                                listOfAllPossibleSubsequences.Add(sequence);
-                            }
-                        }
-                        refListCopy.RemoveAt(refListCopy.Count - 1);
-                    }
-                    refList.Remove(refList[0]);
-                }
-
-                if (listOfAllPossibleSubsequences.Count > 1)
-                {
-                    //Sorts Alphabetically by the first word in the string
-                    listOfAllPossibleSubsequences.Sort((x, y) =>
-                        string.Compare(
-                            x.Split(Constants.s)[0],
-                            y.Split(Constants.s)[0]));
-
-                    //Sorts By Number of words in String
-                    listOfAllPossibleSubsequences.Sort((x, y) => y.Split(Constants.s).Length - x.Split(Constants.s).Length);
-                }
+                GetAllValidMatches(listOfAllPossibleSubsequences, refList, sEvalString);
+                CustomSort_Alpha_WC(listOfAllPossibleSubsequences);
+                CheckSubsequenceInSubsequence(listOfAllPossibleSubsequences);
             }
             catch (RegexMatchTimeoutException ex)
             {
@@ -67,6 +38,58 @@ namespace BackendForTranscriptionChecker
 
             return listOfAllPossibleSubsequences;
         }
+
+        private static void GetAllValidMatches(List<string> listOfAllPossibleSubsequences, List<string> refList, string sEvalString)
+        {
+            //Computing time is roughly n^2/2
+            while (refList.Count > 0)
+            {
+                List<string> refListCopy = new List<string>(refList); //Creates a new list each iteration since reList dynamically changes 
+
+                while (refListCopy.Count > 0)
+                {
+                    string sequence = String.Join(Constants.space, refListCopy);
+
+                    if (!listOfAllPossibleSubsequences.Contains(sequence, StringComparer.OrdinalIgnoreCase))
+                    {
+                        Match match = Regex.Match(sEvalString, 
+                            String.Concat(Constants.regexCaseInsensitive, sequence), 
+                            RegexOptions.None, 
+                            TimeSpan.FromSeconds(Constants.timeOutTime));
+
+                        if (match.Success)
+                        {
+                            listOfAllPossibleSubsequences.Add(sequence);
+                        }
+                    }
+                    refListCopy.RemoveAt(refListCopy.Count - 1);//Remove Last Element
+                }
+
+                refList.Remove(refList[0]);//Remove FirstElement
+            }
+        }
+
+        private static void CustomSort_Alpha_WC(List<string> listOfAllPossibleSubsequences)
+        {
+            if (listOfAllPossibleSubsequences.Count > 1)
+            {
+                //Sorts Alphabetically by the first word in the string
+                listOfAllPossibleSubsequences.Sort((x, y) =>
+                    string.Compare(
+                        x.Split(Constants.s)[0],
+                        y.Split(Constants.s)[0]));
+
+                //Sorts By NWC - Word Count in String
+                listOfAllPossibleSubsequences.Sort((x, y) => y.Split(Constants.s).Length - x.Split(Constants.s).Length);
+            }
+        }
+
+        private static void CheckSubsequenceInSubsequence(List<string> listOfAllPossibleSubsequences)
+        {
+
+        }
+
+
 
     }
 }

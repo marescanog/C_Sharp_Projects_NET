@@ -60,13 +60,16 @@ namespace BackendForTranscriptionChecker
                 //string[] refArray = { "G", "H", "I", "J", "K", "L", "O", "P", "Q", "E", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P" };
                 // string[] evalArray = { "E", "O", "G", "H", "I", "J", "K", "L", "F", "G", "Q", "P", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P" };
 
-                //string[] refArray = {"The","quick","brown","fox","jumped","over","the","lazy","dog", "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog" };
-                //string[] evalArray = { "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "fox", "jumped", "over", "the", "lazy", "dog" };
+                string[] refArray = {"The","quick","brown","fox","jumped","over","the","lazy","dog", "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog" };
+                string[] evalArray = { "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "fox", "jumped", "over", "the", "lazy", "dog" };
 
-                SubsequenceProcessor _subsequenceProcessor = new SubsequenceProcessor();
+                EvaluatorEngine _evaluatorEngine = new EvaluatorEngine();
 
-                string[] refArray = { "A", "B", "A", "F", "A", "B"};
-                string[] evalArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
+                //string[] refArray = { "A", "B", "A", "F", "A", "B"};
+                //string[] evalArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
+
+                //string[] refArray = {"The","quick","brown","fox","jumped","over","the","lazy","dog" };
+                //string[] evalArray = { "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "fox"};
 
                 Console.WriteLine("The original text");
                 Console.WriteLine("{0} \n", String.Join(" ", refArray));
@@ -75,8 +78,7 @@ namespace BackendForTranscriptionChecker
 
 
                 Console.WriteLine("\nThe evaluated pattern");
-                List<string> listofAllsequences = _subsequenceProcessor.GetListOfAllPossibleSubsequences(refArray, evalArray);
-                listofAllsequences.Sort((x, y) => y.Split(Constants.s).Length - x.Split(Constants.s).Length);
+                List<string> listofAllsequences = _evaluatorEngine.Evaluate(refArray, evalArray);
                 foreach (var item in listofAllsequences)
                 {
                     Console.WriteLine(item);
