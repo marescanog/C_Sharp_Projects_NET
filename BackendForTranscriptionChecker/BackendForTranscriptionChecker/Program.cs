@@ -3,6 +3,7 @@ using BackendForTranscriptionChecker.Workers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -64,8 +65,8 @@ namespace BackendForTranscriptionChecker
 
                 SubsequenceProcessor _subsequenceProcessor = new SubsequenceProcessor();
 
-                string[] refArray = { "A", "A", "A", "A", "A" };
-                string[] evalArray = { "A", "A", "A", "A", "A" };
+                string[] refArray = { "A", "B", "A", "F", "A", "B"};
+                string[] evalArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
 
                 Console.WriteLine("The original text");
                 Console.WriteLine("{0} \n", String.Join(" ", refArray));
@@ -73,18 +74,98 @@ namespace BackendForTranscriptionChecker
                 Console.WriteLine("{0} \n", String.Join(" ", evalArray));
 
 
-                Console.WriteLine("\nThe pattern of correct words as a single string");
-                _subsequenceProcessor.GetListOfAllPossibleSubsequences(refArray, evalArray);
+                Console.WriteLine("\nThe evaluated pattern");
+                List<string> listofAllsequences = _subsequenceProcessor.GetListOfAllPossibleSubsequences(refArray, evalArray);
+                listofAllsequences.Sort((x, y) => y.Split(Constants.s).Length - x.Split(Constants.s).Length);
+                foreach (var item in listofAllsequences)
+                {
+                    Console.WriteLine(item);
+                }
 
+
+
+                /*
                 Console.WriteLine("\n\nThe pattern of correct words:");
+                List<string> expectedList = new List<string>();
 
-                
-                Console.WriteLine("End");
+                expectedList.AddRange(new List<string>() {
+                    "B C D E"
+                });
+                */
+
+                /*
+                expectedList.AddRange(new List<string>() {
+                        "Z B C D E",
+                        "Z B C D",
+                        "A B C",
+                        "A B",
+                        "A",
+                        "B C D E",
+                        "B C D",
+                        "B C",
+                        "B",
+                        "C D E",
+                        "C D",
+                        "C",
+                        "D E",
+                        "D",
+                        "E",
+
+                        "A B C D",
+                        "a B C D"
+                });
+                */
+
+                //expectedList.OrderBy(X=>X).ToList().ForEach(Console.WriteLine);
+                //expectedList.Sort();
+
+                //expectedList.Sort((x, y) => y.Split(Constants.s).Length - x.Split(Constants.s).Length);
+
+                /*
+                //Sorts Alphabetically by the first word in the string
+                expectedList.Sort((x, y) => 
+                    string.Compare(
+                        x.Split(Constants.s)[0], 
+                        y.Split(Constants.s)[0]));
+
+                //Sorts By Number of words in String
+                expectedList.Sort((x, y) => y.Split(Constants.s).Length - x.Split(Constants.s).Length);
+                */
+
+                /*
+                Sort(expectedList);
+                expectedList.ForEach(Console.WriteLine);
+
+                if (listofAllsequences.SequenceEqual(expectedList))
+                {
+                    Console.WriteLine("\nEqual");
+                }
+                else
+                {
+                    Console.WriteLine("\nNot Equal");
+                }
+                */
+
+                    Console.WriteLine("\n\nEnd");
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
             }
+
+
+            void Sort(List<string> expectedList)
+            {
+                //Sorts Alphabetically by the first word in the string
+                expectedList.Sort((x, y) =>
+                    string.Compare(
+                        x.Split(Constants.s)[0],
+                        y.Split(Constants.s)[0]));
+
+                //Sorts By Number of words in String
+                expectedList.Sort((x, y) => y.Split(Constants.s).Length - x.Split(Constants.s).Length);
+            }
+
 
         }
     }

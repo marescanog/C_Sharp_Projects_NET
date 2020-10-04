@@ -49,11 +49,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CrossCheckerTest.cs" />
-    <Compile Include="RegexPatternCreatorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PatternGroupBuilderTest.cs" />
-    <Compile Include="TCWGLGeneratorTest.cs" />
+    <Compile Include="TestSubsequenceProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

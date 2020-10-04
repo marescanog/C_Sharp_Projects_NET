@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace BackendForTranscriptionChecker.Workers
 {
-
+    /*
     class EvaluatorEngine
     {
         private readonly RegExPatternCreator _regExPatternCreator;
@@ -102,4 +102,5 @@ namespace BackendForTranscriptionChecker.Workers
             return !(list.Count() - 1 - currentIndex > 6);
         }
     }
+    */
 }

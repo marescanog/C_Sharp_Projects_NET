@@ -5,39 +5,28 @@ namespace BackendForTranscriptionChecker.Objects
 {
     class Subsequence
     {
-        private List<string> _sequenceList = new List<string>();
         private string _sequenceString;
-        private int _value;
+        private bool isLocked = false;
+        private int numberOfElements;
+        private int indexOfFirstElement;
+        private string[] evalArray;
 
-        public Subsequence(List<string> stringList)
+        public Subsequence(string sequence, string[] evalArray)
         {
-            foreach(string word in stringList)
-            {
-                _sequenceList.Add(word);
-            }
-            _sequenceString = String.Join(Constants.space, _sequenceList);
-            _value = _sequenceList.Count;
+            _sequenceString = sequence;
+            this.evalArray = evalArray;
         }
 
-        public Subsequence(string emptyString)
+        public Subsequence()
         {
             _sequenceString = string.Empty;
-            _value = 0;
         }
 
-            public int GetValue()
-        {
-            return _value;
-        }
 
         public string GetString()
         {
             return _sequenceString;
         }
 
-        public List<string> GetList()
-        {
-            return _sequenceList;
-        }
     }
 }
