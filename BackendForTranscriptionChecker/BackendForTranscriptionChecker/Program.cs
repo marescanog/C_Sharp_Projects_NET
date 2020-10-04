@@ -24,9 +24,6 @@ namespace BackendForTranscriptionChecker
                 evaluatorEngine.EvaluateText(referenceText, evaluatedText);
                 */
 
-                RegExPatternCreator _regExPatternCreator = new RegExPatternCreator();
-                //PatternGroupBuilder _patternGroupBuilder = new PatternGroupBuilder();
-                CrossChecker _crossChecker = new CrossChecker();
 
                 //string[] refArray = { "A", "A", "A", "B", "A", "A", "A", "A", "B" };
                 //string[] evalArray = { "B", "A", "F", "F", "A", "B" };
@@ -65,6 +62,8 @@ namespace BackendForTranscriptionChecker
                 //string[] refArray = {"The","quick","brown","fox","jumped","over","the","lazy","dog", "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog" };
                 //string[] evalArray = { "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "fox", "jumped", "over", "the", "lazy", "dog" };
 
+                SubsequenceProcessor _subsequenceProcessor = new SubsequenceProcessor();
+
                 string[] refArray = { "A", "A", "A", "A", "A" };
                 string[] evalArray = { "A", "A", "A", "A", "A" };
 
@@ -73,18 +72,12 @@ namespace BackendForTranscriptionChecker
                 Console.WriteLine("The modified text");
                 Console.WriteLine("{0} \n", String.Join(" ", evalArray));
 
-                CorrectWordGroupListGenerator _correctWordGroupListGenerator = new CorrectWordGroupListGenerator();
-
-                string[] correctWord = _correctWordGroupListGenerator.GetGroupOfSuccessiveCorrectWords(refArray, evalArray);
 
                 Console.WriteLine("\nThe pattern of correct words as a single string");
-                Console.WriteLine(String.Join(" ", correctWord));
+                _subsequenceProcessor.GetListOfAllPossibleSubsequences(refArray, evalArray);
 
                 Console.WriteLine("\n\nThe pattern of correct words:");
-                foreach(var word in correctWord)
-                {
-                    Console.WriteLine(word);
-                }
+
                 
                 Console.WriteLine("End");
             }
