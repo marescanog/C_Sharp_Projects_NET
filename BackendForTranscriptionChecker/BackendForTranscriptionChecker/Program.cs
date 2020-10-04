@@ -14,14 +14,15 @@ namespace BackendForTranscriptionChecker
         {
             try
             {
-                //FileReader fileReader = new FileReader();
+                /*
+                FileReader fileReader = new FileReader();
 
-                //List<string> referenceText = fileReader.Read("Reference.txt");
-                //List<string> evaluatedText = fileReader.Read("Evaluated.txt");
+                List<string> referenceText = fileReader.Read("Reference.txt");
+                List<string> evaluatedText = fileReader.Read("Evaluated.txt");
 
-                //EvaluatorEngine evaluatorEngine = new EvaluatorEngine(new RegExPatternCreator());
-                //evaluatorEngine.EvaluateText(referenceText, evaluatedText);
-
+                EvaluatorEngine evaluatorEngine = new EvaluatorEngine(new RegExPatternCreator());
+                evaluatorEngine.EvaluateText(referenceText, evaluatedText);
+                */
 
                 RegExPatternCreator _regExPatternCreator = new RegExPatternCreator();
                 //PatternGroupBuilder _patternGroupBuilder = new PatternGroupBuilder();
