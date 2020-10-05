@@ -19,7 +19,6 @@ namespace BackendForTranscriptionChecker
             {
                 GetAllValidMatches(listOfAllPossibleSubsequences, refList, sEvalString);
                 //CustomSort_Alpha_WC(listOfAllPossibleSubsequences);
-                //CheckSubsequenceInSubsequence(listOfAllPossibleSubsequences);
             }
             catch (RegexMatchTimeoutException ex)
             {
@@ -40,11 +39,12 @@ namespace BackendForTranscriptionChecker
             return listOfAllPossibleSubsequences;
         }
 
-        private static void GetAllValidMatches(List<string> listOfAllPossibleSubsequences, List<string> refList, string sEvalString)
+        private static void GetAllValidMatches(List<string> listOfAllValidSubsequences, List<string> refList, string sEvalString)
         {
             Dictionary<string, Subsequence> subSqsDictionary = new Dictionary<string, Subsequence>();
 
             //Computing time is roughly (n^2)/2
+
             while (refList.Count > 0) //Loop Used for scanning reflist
             {
                 List<string> refListCopy = new List<string>(refList); //Creates a new list each iteration since refList dynamically changes 
@@ -55,7 +55,7 @@ namespace BackendForTranscriptionChecker
                     string sequence = String.Join(Constants.space, refListCopy);
                     bool isSubSqsInSubSqs = false;
                    
-                    if (!listOfAllPossibleSubsequences.Contains(sequence, StringComparer.OrdinalIgnoreCase))
+                    if (!listOfAllValidSubsequences.Contains(sequence, StringComparer.OrdinalIgnoreCase))
                     {
                         Regex regexSubSqs = new Regex(string.Concat(Constants.regexPatternBuildStart, sequence, Constants.regexPatternBuildEnd), RegexOptions.IgnoreCase);
                         MatchCollection matchSubSqsinEvalString = regexSubSqs.Matches(sEvalString);
@@ -63,17 +63,19 @@ namespace BackendForTranscriptionChecker
                         if(matchSubSqsinEvalString.Count>0)
                         {
                             List<int> listPos = new List<int>(GenerateListOfPositions_forthisSubSqs(matchSubSqsinEvalString));
-                            
-                            //No need to do subsqs within sbsqs checking if this sequence is the first Value
-                            //Add to List Right Away
-                            if (listOfAllPossibleSubsequences.Count != 0)
+
+                            //ByPass sbsqs checking if this sequence is the first Value - Add to List Right Away
+                            if (listOfAllValidSubsequences.Count != 0)
                             {
                                 /////new method
-                                foreach (var otherSubSqs in listOfAllPossibleSubsequences)
+                                ///Checks if the current sequence is a subsequence of another subsequence
+                                ///Goes through the list of all possible subsequences
+                                foreach (var otherSubSqs in listOfAllValidSubsequences)
                                 {
                                     MatchCollection matchSubSQSinSubSQS = regexSubSqs.Matches(otherSubSqs);
 
-                                    if (matchSubSQSinSubSQS.Count > 0)//If thisSubSqs is a subsequence within otherSubsqs, then if is not unique no need to add to list
+                                    //Bypass subsqs in sbsqs Verification if not found in current otherSubSqs element in list
+                                    if (matchSubSQSinSubSQS.Count > 0)
                                     {
                                         //check how many matches are found in the subsequence
                                         //int totalMatchesinOtherSubSQS = subSqsDictionary[otherSubSqs].GetTotalMatches(); //what if there's 2 matches?
@@ -132,7 +134,7 @@ namespace BackendForTranscriptionChecker
             void AddToListOfSubSQS(string sequence, List<int> listPos, MatchCollection matchSubSqsinEvalString)
             {
                 Subsequence temp = new Subsequence(sequence, sequence.ToCharArray().Length, listPos, matchSubSqsinEvalString.Count);
-                listOfAllPossibleSubsequences.Add(sequence);
+                listOfAllValidSubsequences.Add(sequence);
                 subSqsDictionary.Add(sequence, temp); //key is sequence string to find the SubSequence Object
             }
         }
