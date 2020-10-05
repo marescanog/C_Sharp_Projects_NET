@@ -45,12 +45,12 @@ namespace BackendForTranscriptionChecker
             Dictionary<string, Subsequence> subSqsDictionary = new Dictionary<string, Subsequence>();
 
             //Computing time is roughly (n^2)/2
-            while (refList.Count > 0)
+            while (refList.Count > 0) //Loop Used for scanning reflist
             {
                 List<string> refListCopy = new List<string>(refList); //Creates a new list each iteration since refList dynamically changes 
                 bool isMatchFound = false;
 
-                while (refListCopy.Count > 0 && !isMatchFound) //add additional bool matchfound?
+                while (refListCopy.Count > 0 && !isMatchFound) //Loop Used for scanning reflistCopy
                 {
                     string sequence = String.Join(Constants.space, refListCopy);
                     bool isSubSqsInSubSqs = false;
@@ -64,11 +64,11 @@ namespace BackendForTranscriptionChecker
                         {
                             List<int> listPos = new List<int>(GenerateListOfPositions_forthisSubSqs(matchSubSqsinEvalString));
                             
-
-                            /////new method
-                            //Check if it is a subsequence of any one the sequences in current list
-                            if (listOfAllPossibleSubsequences.Count != 0)//If this is the first match then there are no other subsqs to match it with
+                            //No need to do subsqs within sbsqs checking if this sequence is the first Value
+                            //Add to List Right Away
+                            if (listOfAllPossibleSubsequences.Count != 0)
                             {
+                                /////new method
                                 foreach (var otherSubSqs in listOfAllPossibleSubsequences)
                                 {
                                     MatchCollection matchSubSQSinSubSQS = regexSubSqs.Matches(otherSubSqs);
@@ -107,24 +107,17 @@ namespace BackendForTranscriptionChecker
 
                                     }
                                 }
+
+                                //Add to List of Valid Subsqs since it is a valid Subsequence
+                                if (!isSubSqsInSubSqs)
+                                {
+                                    AddToListOfSubSQS(sequence, listPos, matchSubSqsinEvalString);
+                                }
                             }
-
-                            /////end method
-                            ///
-
-
-
-
-
-
-
-                            
-
-                            if (!isSubSqsInSubSqs)//Add to List of Valid Subsqs since it is a valid Subsequence
+                            else
                             {
-                                Subsequence temp = new Subsequence(sequence, sequence.ToCharArray().Length, listPos, matchSubSqsinEvalString.Count);
-                                listOfAllPossibleSubsequences.Add(sequence);
-                                subSqsDictionary.Add(sequence, temp); //key is sequence string to find the SubSequence Object
+                                //Valid Subsequence since it is the first match
+                                AddToListOfSubSQS(sequence, listPos, matchSubSqsinEvalString);
                             }
 
                             isMatchFound = true;
@@ -134,6 +127,13 @@ namespace BackendForTranscriptionChecker
                 }
 
                 refList.Remove(refList[0]);//Remove FirstElement
+            }
+
+            void AddToListOfSubSQS(string sequence, List<int> listPos, MatchCollection matchSubSqsinEvalString)
+            {
+                Subsequence temp = new Subsequence(sequence, sequence.ToCharArray().Length, listPos, matchSubSqsinEvalString.Count);
+                listOfAllPossibleSubsequences.Add(sequence);
+                subSqsDictionary.Add(sequence, temp); //key is sequence string to find the SubSequence Object
             }
         }
 
