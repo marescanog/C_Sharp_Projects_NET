@@ -39,19 +39,9 @@ namespace TranscriptionChecker.Test.Unit
 
             expectedList.AddRange(new List<string>() { 
             "A B C D E",
-            "A B C D",
-            "A B C",
-            "A B",
-            "A",
             "B C D E",
-            "B C D",
-            "B C",
-            "B",
             "C D E",
-            "C D",
-            "C",
             "D E",
-            "D",
             "E"
             });
 
@@ -91,14 +81,8 @@ namespace TranscriptionChecker.Test.Unit
             expectedList.AddRange(new List<string>()
             {
                 "B C D E",
-                "B C D",
-                "B C",
-                "B",
                 "C D E",
-                "C D",
-                "C",
                 "D E",
-                "D",
                 "E"
             });
 
@@ -118,14 +102,8 @@ namespace TranscriptionChecker.Test.Unit
             expectedList.AddRange(new List<string>()
             {
                 "A B C D",
-                "A B C",
-                "A B",
-                "A",
                 "B C D",
-                "B C",
-                "B",
                 "C D",
-                "C",
                 "D"
             });
 
@@ -133,6 +111,7 @@ namespace TranscriptionChecker.Test.Unit
             CollectionAssert.AreEqual(expectedList, processedactual);
         }
 
+        /*
         [TestMethod]
         public void Pattern1()
         {
@@ -147,15 +126,14 @@ namespace TranscriptionChecker.Test.Unit
                 "A B A",
                 "A B",
                 "B A",
-                "A",
                 "B",
                 "F"
             });
 
-            Sort(expectedList);
+            //Sort(expectedList);
             CollectionAssert.AreEqual(expectedList, processedactual);
         }
-
+        */
 
         ///METHODS
         void Sort(List<string> expectedList)

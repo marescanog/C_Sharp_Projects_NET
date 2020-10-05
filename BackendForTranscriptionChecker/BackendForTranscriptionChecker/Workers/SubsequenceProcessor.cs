@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BackendForTranscriptionChecker.Objects;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,8 @@ namespace BackendForTranscriptionChecker
             try
             {
                 GetAllValidMatches(listOfAllPossibleSubsequences, refList, sEvalString);
-                CustomSort_Alpha_WC(listOfAllPossibleSubsequences);
-                CheckSubsequenceInSubsequence(listOfAllPossibleSubsequences);
+                //CustomSort_Alpha_WC(listOfAllPossibleSubsequences);
+                //CheckSubsequenceInSubsequence(listOfAllPossibleSubsequences);
             }
             catch (RegexMatchTimeoutException ex)
             {
@@ -41,25 +42,92 @@ namespace BackendForTranscriptionChecker
 
         private static void GetAllValidMatches(List<string> listOfAllPossibleSubsequences, List<string> refList, string sEvalString)
         {
-            //Computing time is roughly n^2/2
+            Dictionary<string, Subsequence> subSqsDictionary = new Dictionary<string, Subsequence>();
+
+            //Computing time is roughly (n^2)/2
             while (refList.Count > 0)
             {
-                List<string> refListCopy = new List<string>(refList); //Creates a new list each iteration since reList dynamically changes 
+                List<string> refListCopy = new List<string>(refList); //Creates a new list each iteration since refList dynamically changes 
+                bool isMatchFound = false;
 
-                while (refListCopy.Count > 0)
+                while (refListCopy.Count > 0 && !isMatchFound) //add additional bool matchfound?
                 {
                     string sequence = String.Join(Constants.space, refListCopy);
-
+                    bool isSubSqsInSubSqs = false;
+                   
                     if (!listOfAllPossibleSubsequences.Contains(sequence, StringComparer.OrdinalIgnoreCase))
                     {
-                        Match match = Regex.Match(sEvalString, 
-                            String.Concat(Constants.regexCaseInsensitive, sequence), 
-                            RegexOptions.None, 
-                            TimeSpan.FromSeconds(Constants.timeOutTime));
+                        Regex regexSubSqs = new Regex(string.Concat(Constants.regexPatternBuildStart, sequence, Constants.regexPatternBuildEnd), RegexOptions.IgnoreCase);
+                        MatchCollection matchSubSqsinEvalString = regexSubSqs.Matches(sEvalString);
 
-                        if (match.Success)
+                        if(matchSubSqsinEvalString.Count>0)
                         {
-                            listOfAllPossibleSubsequences.Add(sequence);
+                            List<int> listPos = new List<int>(GenerateListOfPositions_forthisSubSqs(matchSubSqsinEvalString));
+                            
+
+                            /////new method
+                            //Check if it is a subsequence of any one the sequences in current list
+                            if (listOfAllPossibleSubsequences.Count != 0)//If this is the first match then there are no other subsqs to match it with
+                            {
+                                foreach (var otherSubSqs in listOfAllPossibleSubsequences)
+                                {
+                                    MatchCollection matchSubSQSinSubSQS = regexSubSqs.Matches(otherSubSqs);
+
+                                    if (matchSubSQSinSubSQS.Count > 0)//If thisSubSqs is a subsequence within otherSubsqs, then if is not unique no need to add to list
+                                    {
+                                        //check how many matches are found in the subsequence
+                                        //int totalMatchesinOtherSubSQS = subSqsDictionary[otherSubSqs].GetTotalMatches(); //what if there's 2 matches?
+
+                                        int totalMatchesForThisSubSQS = matchSubSqsinEvalString.Count;
+                                        foreach (var match in matchSubSqsinEvalString)
+                                        {
+
+
+                                            //compare with each value in totalMatchesinOtherSubSQS
+                                        }
+
+                                        ///Check if it has a lone match aside from matches in other subsequences
+                                        ///*
+                                        ///     ///array match with position?
+                                        ///      data needed otherSubSqs.match count, dictionary with [matchNumber, postion] -> or just list, yes list case match number 0above
+                                        ///     
+                                        ///      for each match in matchSubSqsinEvalString match its position range in relation to otherSubSqs position ranges
+                                        ///      index-posRan       index-posRan
+                                        ///      1 - 4 + len        1 - 4 + len
+                                        ///      2 - 8 + len        2 - 8 + len
+                                        ///      3 - 12 + len
+                                        ///     
+                                        ///       break when range does not match/out of bounds (start, end)
+                                        /// (4, 6)      (4,8)   if start > start and end < end
+                                        /// (10, 12)     (9,13)
+                                        /// (13, 115)       
+                                        /// 
+                                        /// 
+                                        ///
+
+                                    }
+                                }
+                            }
+
+                            /////end method
+                            ///
+
+
+
+
+
+
+
+                            
+
+                            if (!isSubSqsInSubSqs)//Add to List of Valid Subsqs since it is a valid Subsequence
+                            {
+                                Subsequence temp = new Subsequence(sequence, sequence.ToCharArray().Length, listPos, matchSubSqsinEvalString.Count);
+                                listOfAllPossibleSubsequences.Add(sequence);
+                                subSqsDictionary.Add(sequence, temp); //key is sequence string to find the SubSequence Object
+                            }
+
+                            isMatchFound = true;
                         }
                     }
                     refListCopy.RemoveAt(refListCopy.Count - 1);//Remove Last Element
@@ -67,6 +135,28 @@ namespace BackendForTranscriptionChecker
 
                 refList.Remove(refList[0]);//Remove FirstElement
             }
+        }
+
+        private static List<int> GenerateListOfPositions_forthisSubSqs(MatchCollection matchSubSqsinEvalString)
+        {
+            List<int> listPos = new List<int>();
+
+            //Makes list of positions for all the matches in this subsequence
+            foreach (Match match in matchSubSqsinEvalString)
+            {
+                for (int i = 1; i <= 2; i++)
+                {
+                    Group g = match.Groups[i];
+                    CaptureCollection cc = g.Captures;
+                    for (int j = 0; j < cc.Count; j++)
+                    {
+                        Capture c = cc[j];
+                        listPos.Add(c.Index);
+                    }
+                }
+            }
+
+            return listPos;
         }
 
         private static void CustomSort_Alpha_WC(List<string> listOfAllPossibleSubsequences)
@@ -83,13 +173,6 @@ namespace BackendForTranscriptionChecker
                 listOfAllPossibleSubsequences.Sort((x, y) => y.Split(Constants.s).Length - x.Split(Constants.s).Length);
             }
         }
-
-        private static void CheckSubsequenceInSubsequence(List<string> listOfAllPossibleSubsequences)
-        {
-
-        }
-
-
-
+        
     }
 }
