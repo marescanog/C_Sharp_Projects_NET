@@ -7,7 +7,7 @@ namespace BackendForTranscriptionChecker.Objects
     class Subsequence
     {
         private string _sequenceString;
-        private int _totalMatches = 0; //include
+        private int _totalMatches = 0; 
         private List<int> _listOfPos; //index is match number, value is position
         private int _length = 0;
 

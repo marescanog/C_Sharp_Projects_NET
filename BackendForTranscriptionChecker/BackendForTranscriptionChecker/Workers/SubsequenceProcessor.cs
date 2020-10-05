@@ -78,12 +78,28 @@ namespace BackendForTranscriptionChecker
                                     if (matchSubSQSinSubSQS.Count > 0)
                                     {
                                         //check how many matches are found in the subsequence
-                                        //int totalMatchesinOtherSubSQS = subSqsDictionary[otherSubSqs].GetTotalMatches(); //what if there's 2 matches?
+                                        Subsequence data_otherSubSqs = subSqsDictionary[otherSubSqs];
+                                        int totalMatchesinOtherSubSQS = data_otherSubSqs.GetTotalMatches(); //what if there's 2 matches?
+                                        //A loop inside foreach will handle matching
 
                                         int totalMatchesForThisSubSQS = matchSubSqsinEvalString.Count;
-                                        foreach (var match in matchSubSqsinEvalString)
+                                        //foreach (var foundMatch in matchSubSqsinEvalString)
+                                        for (int index = 0; index < matchSubSqsinEvalString.Count; index++)
                                         {
+                                            int startIndexThisSubsqsMatchElement = listPos[index];
+                                            int endIndexThisSubsqsMatchElement = listPos[index] + sequence.ToCharArray().Length - 1;
 
+                                            for (int otherSbSQSMatchNumber = 1; otherSbSQSMatchNumber <= totalMatchesinOtherSubSQS; otherSbSQSMatchNumber++)
+                                            {
+                                                int startIndexOtherSubsqs = data_otherSubSqs.GetStartPosIndex(otherSbSQSMatchNumber);
+                                                int endIndexOtherSubsqs = data_otherSubSqs.GetEndPosIndex(otherSbSQSMatchNumber);
+
+                                                bool isThisSbSQS_inside_OtherSbSQS = startIndexThisSubsqsMatchElement >= startIndexOtherSubsqs && endIndexThisSubsqsMatchElement <= endIndexOtherSubsqs;
+
+
+                                                Console.WriteLine("Hey");
+                                            }
+                                            
 
                                             //compare with each value in totalMatchesinOtherSubSQS
                                         }
