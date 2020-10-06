@@ -60,16 +60,16 @@ namespace BackendForTranscriptionChecker
                 //string[] refArray = { "G", "H", "I", "J", "K", "L", "O", "P", "Q", "E", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P" };
                 // string[] evalArray = { "E", "O", "G", "H", "I", "J", "K", "L", "F", "G", "Q", "P", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P" };
 
-                string[] refArray = { "The","quick","brown","fox","jumped","over","the","lazy","dog", "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog" };
-                string[] evalArray = { "blah", "blah", "The", "quick", "brown", "fox","jumped", "over", "the", "lazy", "fox", "jumped", "over", "the", "lazy", "pig" };
+                //string[] refArray = { "The","quick","brown","fox","jumped","over","the","lazy","dog", "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog" };
+                //string[] evalArray = { "blah", "blah", "The", "quick", "brown", "fox","jumped", "over", "the", "lazy", "fox", "jumped", "over", "the", "lazy", "pig" };
 
                 //string[] refArray = { "The", "quick", "brown", "fox", "jumped" };
                //string[] evalArray = { "blah", "blah", "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "fox", "jumped", "over", "the", "lazy", "pig", "The", "quick", "brown", "fox", "jumped" };
 
                 EvaluatorEngine _evaluatorEngine = new EvaluatorEngine();
 
-                //string[] refArray = { "A", "B", "A", "F", "A", "B"};
-                //string[] evalArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
+                string[] refArray = { "A", "B", "A", "F", "A", "B"};
+                string[] evalArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
 
                 //string[] refArray = {"The","quick","brown","fox","jumped","over","the","lazy","dog" };
                 //string[] evalArray = { "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "fox"};

@@ -38,11 +38,7 @@ namespace TranscriptionChecker.Test.Unit
             List<string> processedactual = _subsequenceProcessor.GetListOfAllPossibleSubsequences(refArray, evalArray);
 
             expectedList.AddRange(new List<string>() { 
-            "A B C D E",
-            "B C D E",
-            "C D E",
-            "D E",
-            "E"
+            "A B C D E"
             });
 
             Sort(expectedList);
@@ -81,9 +77,6 @@ namespace TranscriptionChecker.Test.Unit
             expectedList.AddRange(new List<string>()
             {
                 "B C D E",
-                "C D E",
-                "D E",
-                "E"
             });
 
             Sort(expectedList);
@@ -101,17 +94,14 @@ namespace TranscriptionChecker.Test.Unit
 
             expectedList.AddRange(new List<string>()
             {
-                "A B C D",
-                "B C D",
-                "C D",
-                "D"
+                "A B C D"
             });
 
             Sort(expectedList);
             CollectionAssert.AreEqual(expectedList, processedactual);
         }
 
-        /*
+        
         [TestMethod]
         public void Pattern1()
         {
@@ -124,16 +114,15 @@ namespace TranscriptionChecker.Test.Unit
             expectedList.AddRange(new List<string>()
             {
                 "A B A",
-                "A B",
                 "B A",
-                "B",
-                "F"
+                "F",
+                "A B"
             });
 
-            //Sort(expectedList);
+            Sort(expectedList);
             CollectionAssert.AreEqual(expectedList, processedactual);
         }
-        */
+        
 
         ///METHODS
         void Sort(List<string> expectedList)

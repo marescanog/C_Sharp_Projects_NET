@@ -1,6 +1,5 @@
 ﻿using BackendForTranscriptionChecker.Objects;
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -18,7 +17,7 @@ namespace BackendForTranscriptionChecker
             try
             {
                 GetAllValidMatches(listOfAllPossibleSubsequences, refList, sEvalString);
-                //CustomSort_Alpha_WC(listOfAllPossibleSubsequences);
+                CustomSort_Alpha_WC(listOfAllPossibleSubsequences);
             }
             catch (RegexMatchTimeoutException ex)
             {
@@ -59,8 +58,10 @@ namespace BackendForTranscriptionChecker
                     {
                         Regex regexSubSqs = new Regex(string.Concat(Constants.regexPatternBuildStart, sequence, Constants.regexPatternBuildEnd), RegexOptions.IgnoreCase);
                         MatchCollection matchSubSqsinEvalString = regexSubSqs.Matches(sEvalString);
+                        ////////
+                        int totalMatchesForThissbSQS = matchSubSqsinEvalString.Count;
 
-                        if(matchSubSqsinEvalString.Count>0)
+                        if (matchSubSqsinEvalString.Count>0)
                         {
                             List<int> listPos = new List<int>(GenerateListOfPositions_forthisSubSqs(matchSubSqsinEvalString));
 
@@ -79,10 +80,8 @@ namespace BackendForTranscriptionChecker
                                     {
                                         //check how many matches are found in the subsequence
                                         Subsequence data_otherSubSqs = subSqsDictionary[otherSubSqs];
-                                        int totalMatchesinOtherSubSQS = data_otherSubSqs.GetTotalMatches(); //what if there's 2 matches?
-                                        //A loop inside foreach will handle matching
+                                        int totalMatchesinOtherSubSQS = data_otherSubSqs.GetTotalMatches(); 
 
-                                        int totalMatchesForThisSubSQS = matchSubSqsinEvalString.Count;
                                         //foreach (var foundMatch in matchSubSqsinEvalString)
                                         for (int index = 0; index < matchSubSqsinEvalString.Count; index++)
                                         {
@@ -95,13 +94,12 @@ namespace BackendForTranscriptionChecker
                                                 int endIndexOtherSubsqs = data_otherSubSqs.GetEndPosIndex(otherSbSQSMatchNumber);
 
                                                 bool isThisSbSQS_inside_OtherSbSQS = startIndexThisSubsqsMatchElement >= startIndexOtherSubsqs && endIndexThisSubsqsMatchElement <= endIndexOtherSubsqs;
-
-
-                                                Console.WriteLine("Hey");
+                                                
+                                                if(isThisSbSQS_inside_OtherSbSQS)
+                                                {
+                                                    totalMatchesForThissbSQS--;
+                                                }
                                             }
-                                            
-
-                                            //compare with each value in totalMatchesinOtherSubSQS
                                         }
 
                                         ///Check if it has a lone match aside from matches in other subsequences
@@ -123,6 +121,11 @@ namespace BackendForTranscriptionChecker
                                         /// 
                                         ///
 
+                                    }
+
+                                    if(totalMatchesForThissbSQS <= 0)//change maybe total matches isn't best validator
+                                    {
+                                        isSubSqsInSubSqs = true;
                                     }
                                 }
 
