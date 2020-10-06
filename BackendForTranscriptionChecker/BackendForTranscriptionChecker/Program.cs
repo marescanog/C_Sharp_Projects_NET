@@ -86,7 +86,7 @@ namespace BackendForTranscriptionChecker
                 string[] evalArray = {
                     "Look", "again", "at", "that", "dot",
                     "That's", "here", "That's", "home", "That's", "is",
-                    "An", "it", "everyone", "he", "love",
+                    "Ap", "it", "everyone", "he", "love",
                     "everyone", "you", "know", "you",
                     "ever", "heard", "of", "every", "human",
                     "being", "who", "ever", "has", "lived",

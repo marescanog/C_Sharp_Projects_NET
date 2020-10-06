@@ -377,9 +377,11 @@ namespace TranscriptionChecker.Test.Unit
             {
                 "Look again at that dot That's here That's home That's",
                 "it everyone",
+                "everyone you",
                 "love everyone you know",
                 "you ever heard of every human being who ever",
-                "lived out their lives"
+                "lived out their lives",
+                "you"
 
             });
 
