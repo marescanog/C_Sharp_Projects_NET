@@ -74,6 +74,8 @@ namespace BackendForTranscriptionChecker
                 //string[] refArray = {"The","quick","brown","fox","jumped","over","the","lazy","dog" };
                 //string[] evalArray = { "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "fox"};
 
+
+                
                 string[] refArray = {
                     "Look", "again", "at", "that", "dot",
                     "That's", "here", "That's", "home", "That's", "us",
@@ -92,7 +94,7 @@ namespace BackendForTranscriptionChecker
                     "being", "who", "ever", "has", "lived",
                     "out", "their", "lives"
                 };
-
+                
 
 
                 Console.WriteLine("The original text");

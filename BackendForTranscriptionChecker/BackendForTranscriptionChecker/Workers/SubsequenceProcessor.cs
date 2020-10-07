@@ -8,6 +8,9 @@ namespace BackendForTranscriptionChecker
 {
     class SubsequenceProcessor
     {
+        private Dictionary<string, Subsequence> _subSqsDictionary = new Dictionary<string, Subsequence>();
+        private bool hasGeneratedListOfAllPossibleSubSequences = false;
+
         public List<string> GetListOfAllPossibleSubsequences(string[] refArray, string[] evalArray)
         {
             List<string> listOfAllPossibleSubsequences = new List<string>();
@@ -18,6 +21,7 @@ namespace BackendForTranscriptionChecker
             {
                 GetAllValidMatches(listOfAllPossibleSubsequences, refList, sEvalString);
                 CustomSort_Alpha_WC(listOfAllPossibleSubsequences);
+                hasGeneratedListOfAllPossibleSubSequences = true;
             }
             catch (RegexMatchTimeoutException ex)
             {
@@ -34,13 +38,20 @@ namespace BackendForTranscriptionChecker
                 Console.Write(ex.Message);
                 throw ex;
             }
-
+            
             return listOfAllPossibleSubsequences;
         }
 
-        private static void GetAllValidMatches(List<string> listOfAllValidSubsequences, List<string> refList, string sEvalString)
+        public Dictionary<string, Subsequence> RetreiveDisctionaryOfSubsequences() /// Maybe just make it return the Dictionary instead of a list (Refactor Code)
         {
-            Dictionary<string, Subsequence> subSqsDictionary = new Dictionary<string, Subsequence>();
+            if(hasGeneratedListOfAllPossibleSubSequences)
+            return _subSqsDictionary;
+            else
+                throw new Exception("Dictionary of Subsequences has not been generated: GetListOfAllPossibleSequences First");
+        }
+        private void GetAllValidMatches(List<string> listOfAllValidSubsequences, List<string> refList, string sEvalString)
+        {
+            
 
             //Computing time is roughly (n^2)/2
 
@@ -79,7 +90,7 @@ namespace BackendForTranscriptionChecker
                                     if (matchSubSQSinSubSQS.Count > 0)
                                     {
                                         //check how many matches are found in the subsequence
-                                        Subsequence data_otherSubSqs = subSqsDictionary[otherSubSqs];
+                                        Subsequence data_otherSubSqs = _subSqsDictionary[otherSubSqs];
                                         int totalMatchesinOtherSubSQS = data_otherSubSqs.GetTotalMatches(); 
 
                                         //foreach (var foundMatch in matchSubSqsinEvalString)
@@ -154,7 +165,7 @@ namespace BackendForTranscriptionChecker
             {
                 Subsequence temp = new Subsequence(sequence, sequence.ToCharArray().Length, listPos, matchSubSqsinEvalString.Count);
                 listOfAllValidSubsequences.Add(sequence);
-                subSqsDictionary.Add(sequence, temp); //key is sequence string to find the SubSequence Object
+                _subSqsDictionary.Add(sequence, temp); //key is sequence string to find the SubSequence Object
             }
         }
 
