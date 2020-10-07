@@ -68,14 +68,14 @@ namespace BackendForTranscriptionChecker
 
                 EvaluatorEngine _evaluatorEngine = new EvaluatorEngine();
 
-                //string[] refArray = { "A", "B", "A", "F", "A", "B"};
-                //string[] evalArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
+                string[] refArray = { "A", "B", "A", "F", "A", "B"};
+                string[] evalArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
 
                 //string[] refArray = {"The","quick","brown","fox","jumped","over","the","lazy","dog" };
                 //string[] evalArray = { "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "fox"};
 
 
-                
+                /*
                 string[] refArray = {
                     "Look", "again", "at", "that", "dot",
                     "That's", "here", "That's", "home", "That's", "us",
@@ -94,8 +94,11 @@ namespace BackendForTranscriptionChecker
                     "being", "who", "ever", "has", "lived",
                     "out", "their", "lives"
                 };
+                */
                 
-
+                
+                //string[] refArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
+                //string[] evalArray = { "A", "B", "A", "F", "A", "B" };
 
                 Console.WriteLine("The original text");
                 Console.WriteLine("{0} \n", String.Join(" ", refArray));

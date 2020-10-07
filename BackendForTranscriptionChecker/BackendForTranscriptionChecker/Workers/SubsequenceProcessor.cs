@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using System.Text.RegularExpressions;
 
 namespace BackendForTranscriptionChecker
@@ -20,6 +21,8 @@ namespace BackendForTranscriptionChecker
             try
             {
                 GetAllValidMatches(listOfAllPossibleSubsequences, refList, sEvalString);
+                FilterAllValidMatches(listOfAllPossibleSubsequences, sEvalString);
+
                 CustomSort_Alpha_WC(listOfAllPossibleSubsequences);
                 hasGeneratedListOfAllPossibleSubSequences = true;
             }
@@ -51,8 +54,6 @@ namespace BackendForTranscriptionChecker
         }
         private void GetAllValidMatches(List<string> listOfAllValidSubsequences, List<string> refList, string sEvalString)
         {
-            
-
             //Computing time is roughly (n^2)/2
 
             while (refList.Count > 0) //Loop Used for scanning reflist
@@ -96,6 +97,7 @@ namespace BackendForTranscriptionChecker
                                         //foreach (var foundMatch in matchSubSqsinEvalString)
                                         for (int index = 0; index < matchSubSqsinEvalString.Count; index++)
                                         {
+
                                             int startIndexThisSubsqsMatchElement = listPos[index];
                                             int endIndexThisSubsqsMatchElement = listPos[index] + sequence.ToCharArray().Length - 1;
 
@@ -169,6 +171,76 @@ namespace BackendForTranscriptionChecker
             }
         }
 
+        private void FilterAllValidMatches(List<string> SubSqsList, string evalstring)
+        {
+            CustomSort_Reverse_Alpha_WC(SubSqsList);
+
+            for (int i=0; i< SubSqsList.Count;)
+            {
+                Subsequence data_thisSubSqs = _subSqsDictionary[SubSqsList[i]];
+                int totalMatchesForThissbSQS = data_thisSubSqs.GetTotalMatches();
+                int dynamicTotalMatchThisSbSQS = data_thisSubSqs.GetTotalMatches();
+                string thisSubSqsString = data_thisSubSqs.GetString();
+
+                for (int k=i+1; k<SubSqsList.Count; k++)
+                {
+                    Regex regex= new Regex(string.Concat(Constants.regexPatternBuildStart, thisSubSqsString, Constants.regexPatternBuildEnd), RegexOptions.IgnoreCase);
+
+                    Subsequence data_otherSubSqs = _subSqsDictionary[SubSqsList[k]];
+                    int totalMatchesinOtherSubSQS = data_otherSubSqs.GetTotalMatches();
+                    string otherSubSqsString = data_otherSubSqs.GetString();
+
+                    Match match = regex.Match(otherSubSqsString);
+
+                    if(match.Success)
+                    {
+                        for (int index = 1; index <= totalMatchesForThissbSQS; index++)
+                        {
+                            int startIndexThisSubsqsMatchElement = data_thisSubSqs.GetStartPosIndex(index);
+                            int endIndexThisSubsqsMatchElement = data_thisSubSqs.GetEndPosIndex(index);
+
+                            for (int otherSbSQSMatchNumber = 1; otherSbSQSMatchNumber <= totalMatchesinOtherSubSQS; otherSbSQSMatchNumber++)
+                            {
+                                int startIndexOtherSubsqs = data_otherSubSqs.GetStartPosIndex(otherSbSQSMatchNumber);
+                                int endIndexOtherSubsqs = data_otherSubSqs.GetEndPosIndex(otherSbSQSMatchNumber);
+
+                                bool isThisSbSQS_inside_OtherSbSQS = startIndexThisSubsqsMatchElement >= startIndexOtherSubsqs 
+                                    && endIndexThisSubsqsMatchElement <= endIndexOtherSubsqs;
+
+                                bool isThisSbSQS_anInterSectionOf_OtherSbSQS_start = startIndexThisSubsqsMatchElement > startIndexOtherSubsqs
+                                    && endIndexThisSubsqsMatchElement <= endIndexOtherSubsqs;
+
+                                bool isThisSbSQS_anInterSectionOf_OtherSbSQS_end = startIndexThisSubsqsMatchElement >= startIndexOtherSubsqs
+                                    && endIndexThisSubsqsMatchElement > endIndexOtherSubsqs;
+
+                                bool isAnIntersection = isThisSbSQS_anInterSectionOf_OtherSbSQS_start || isThisSbSQS_anInterSectionOf_OtherSbSQS_end;
+
+                                if (isThisSbSQS_inside_OtherSbSQS)
+                                {
+                                    dynamicTotalMatchThisSbSQS--;
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                //foreach (var foundMatch in matchSubSqsinEvalString)
+                if (dynamicTotalMatchThisSbSQS <= 0)
+                {
+                    SubSqsList.Remove(data_thisSubSqs.GetString());
+                    _subSqsDictionary.Remove(data_thisSubSqs.GetString());
+                }
+                else
+                {
+                    i++;
+                }
+
+            }
+
+
+        }
+
         private static List<int> GenerateListOfPositions_forthisSubSqs(MatchCollection matchSubSqsinEvalString)
         {
             List<int> listPos = new List<int>();
@@ -205,6 +277,25 @@ namespace BackendForTranscriptionChecker
                 listOfAllPossibleSubsequences.Sort((x, y) => y.Split(Constants.s).Length - x.Split(Constants.s).Length);
             }
         }
-        
+
+        private static void CustomSort_Reverse_Alpha_WC(List<string> listOfAllPossibleSubsequences)
+        {
+            if (listOfAllPossibleSubsequences.Count > 1)
+            {
+                //Sorts Alphabetically by the first word in the string
+                listOfAllPossibleSubsequences.Sort((x, y) =>
+                    string.Compare(
+                        x.Split(Constants.s)[0],
+                        y.Split(Constants.s)[0]));
+
+                //Sorts By NWC - Word Count in String
+                listOfAllPossibleSubsequences.Sort((x, y) => x.Split(Constants.s).Length - y.Split(Constants.s).Length);
+            }
+        }
+
     }
+
+
+
 }
+

@@ -307,6 +307,7 @@ namespace TranscriptionChecker.Test.Unit
             CollectionAssert.AreEqual(expectedList, processedactual);
         }
 
+        
         [TestMethod]
         public void Pattern4()
         {
@@ -327,6 +328,7 @@ namespace TranscriptionChecker.Test.Unit
             Sort(expectedList);
             CollectionAssert.AreEqual(expectedList, processedactual);
         }
+        
 
         [TestMethod]
         public void Pattern5()
@@ -377,11 +379,11 @@ namespace TranscriptionChecker.Test.Unit
             {
                 "Look again at that dot That's here That's home That's",
                 "it everyone",
-                "everyone you",
+                //"everyone you",
                 "love everyone you know",
                 "you ever heard of every human being who ever",
                 "lived out their lives",
-                "you"
+                //"you"
 
             });
 
