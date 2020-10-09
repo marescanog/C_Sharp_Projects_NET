@@ -18,12 +18,11 @@ namespace BackendForTranscriptionChecker
                 /*
                 FileReader fileReader = new FileReader();
 
-                List<string> referenceText = fileReader.Read("Reference.txt");
-                List<string> evaluatedText = fileReader.Read("Evaluated.txt");
-
-                EvaluatorEngine evaluatorEngine = new EvaluatorEngine(new RegExPatternCreator());
-                evaluatorEngine.EvaluateText(referenceText, evaluatedText);
+                List<string> refArray = fileReader.Read("Reference.txt");
+                List<string> evalArray = fileReader.Read("Evaluated.txt");
                 */
+
+                
 
 
                 //string[] refArray = { "A", "A", "A", "B", "A", "A", "A", "A", "B" };
@@ -64,12 +63,12 @@ namespace BackendForTranscriptionChecker
                 //string[] evalArray = { "blah", "blah", "The", "quick", "brown", "fox","jumped", "over", "the", "lazy", "fox", "jumped", "over", "the", "lazy", "pig" };
 
                 //string[] refArray = { "The", "quick", "brown", "fox", "jumped" };
-               //string[] evalArray = { "blah", "blah", "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "fox", "jumped", "over", "the", "lazy", "pig", "The", "quick", "brown", "fox", "jumped" };
+                //string[] evalArray = { "blah", "blah", "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "fox", "jumped", "over", "the", "lazy", "pig", "The", "quick", "brown", "fox", "jumped" };
 
                 EvaluatorEngine _evaluatorEngine = new EvaluatorEngine();
 
-                string[] refArray = { "A", "B", "A", "F", "A", "B"};
-                string[] evalArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
+                //string[] refArray = { "A", "B", "A", "F", "A", "B"};
+                //string[] evalArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
 
                 //string[] refArray = {"The","quick","brown","fox","jumped","over","the","lazy","dog" };
                 //string[] evalArray = { "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "fox"};
@@ -95,10 +94,13 @@ namespace BackendForTranscriptionChecker
                     "out", "their", "lives"
                 };
                 */
-                
-                
-                //string[] refArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
-                //string[] evalArray = { "A", "B", "A", "F", "A", "B" };
+
+
+                string[] refArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
+                string[] evalArray = { "A", "B", "A", "F", "A", "B" };
+
+                //string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
+                //string[] evalArray = { "A", "B", "B", "B", "B", "I", "I", "I", "I", "F" };
 
                 Console.WriteLine("The original text");
                 Console.WriteLine("{0} \n", String.Join(" ", refArray));
@@ -107,7 +109,7 @@ namespace BackendForTranscriptionChecker
 
 
                 Console.WriteLine("\nThe evaluated pattern");
-                List<string> listofAllsequences = _evaluatorEngine.Evaluate(refArray, evalArray);
+                List<string> listofAllsequences = _evaluatorEngine.Evaluate(refArray.ToArray(), evalArray.ToArray());
                 foreach (var item in listofAllsequences)
                 {
                     Console.WriteLine(item);
@@ -184,7 +186,7 @@ namespace BackendForTranscriptionChecker
                 Console.WriteLine("Error: " + ex.Message);
             }
 
-
+            /*
             void Sort(List<string> expectedList)
             {
                 //Sorts Alphabetically by the first word in the string
@@ -196,7 +198,7 @@ namespace BackendForTranscriptionChecker
                 //Sorts By Number of words in String
                 expectedList.Sort((x, y) => y.Split(Constants.s).Length - x.Split(Constants.s).Length);
             }
-
+            */
 
         }
     }

@@ -1,15 +1,16 @@
 ﻿using BackendForTranscriptionChecker.Objects;
+using BackendForTranscriptionChecker.Workers.SubWorkers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using System.Text.RegularExpressions;
 
 namespace BackendForTranscriptionChecker
 {
     class SubsequenceProcessor
     {
-        private Dictionary<string, Subsequence> _subSqsDictionary = new Dictionary<string, Subsequence>();
+        private readonly Dictionary<string, Subsequence> _subSqsDictionary = new Dictionary<string, Subsequence>();
+        private readonly SubSQSPositionGenerator _subSQSPositionGenerator = new SubSQSPositionGenerator();
         private bool hasGeneratedListOfAllPossibleSubSequences = false;
 
         public List<string> GetListOfAllPossibleSubsequences(string[] refArray, string[] evalArray)
@@ -21,7 +22,7 @@ namespace BackendForTranscriptionChecker
             try
             {
                 GetAllValidMatches(listOfAllPossibleSubsequences, refList, sEvalString);
-                FilterAllValidMatches(listOfAllPossibleSubsequences, sEvalString);
+                FilterAllValidMatches(listOfAllPossibleSubsequences);
 
                 CustomSort_Alpha_WC(listOfAllPossibleSubsequences);
                 hasGeneratedListOfAllPossibleSubSequences = true;
@@ -52,6 +53,7 @@ namespace BackendForTranscriptionChecker
             else
                 throw new Exception("Dictionary of Subsequences has not been generated: GetListOfAllPossibleSequences First");
         }
+
         private void GetAllValidMatches(List<string> listOfAllValidSubsequences, List<string> refList, string sEvalString)
         {
             //Computing time is roughly (n^2)/2
@@ -75,7 +77,8 @@ namespace BackendForTranscriptionChecker
 
                         if (matchSubSqsinEvalString.Count>0)
                         {
-                            List<int> listPos = new List<int>(GenerateListOfPositions_forthisSubSqs(matchSubSqsinEvalString));
+                            
+                            List<int> listPos = new List<int>(_subSQSPositionGenerator.GenerateListOfPositions_forthisSubSqs(matchSubSqsinEvalString));
 
                             //ByPass sbsqs checking if this sequence is the first Value - Add to List Right Away
                             if (listOfAllValidSubsequences.Count != 0)
@@ -114,26 +117,6 @@ namespace BackendForTranscriptionChecker
                                                 }
                                             }
                                         }
-
-                                        ///Check if it has a lone match aside from matches in other subsequences
-                                        ///*
-                                        ///     ///array match with position?
-                                        ///      data needed otherSubSqs.match count, dictionary with [matchNumber, postion] -> or just list, yes list case match number 0above
-                                        ///     
-                                        ///      for each match in matchSubSqsinEvalString match its position range in relation to otherSubSqs position ranges
-                                        ///      index-posRan       index-posRan
-                                        ///      1 - 4 + len        1 - 4 + len
-                                        ///      2 - 8 + len        2 - 8 + len
-                                        ///      3 - 12 + len
-                                        ///     
-                                        ///       break when range does not match/out of bounds (start, end)
-                                        /// (4, 6)      (4,8)   if start > start and end < end
-                                        /// (10, 12)     (9,13)
-                                        /// (13, 115)       
-                                        /// 
-                                        /// 
-                                        ///
-
                                     }
 
                                     if(totalMatchesForThissbSQS <= 0)//change maybe total matches isn't best validator
@@ -171,7 +154,7 @@ namespace BackendForTranscriptionChecker
             }
         }
 
-        private void FilterAllValidMatches(List<string> SubSqsList, string evalstring)
+        private void FilterAllValidMatches(List<string> SubSqsList)
         {
             CustomSort_Reverse_Alpha_WC(SubSqsList);
 
@@ -206,14 +189,6 @@ namespace BackendForTranscriptionChecker
 
                                 bool isThisSbSQS_inside_OtherSbSQS = startIndexThisSubsqsMatchElement >= startIndexOtherSubsqs 
                                     && endIndexThisSubsqsMatchElement <= endIndexOtherSubsqs;
-
-                                bool isThisSbSQS_anInterSectionOf_OtherSbSQS_start = startIndexThisSubsqsMatchElement > startIndexOtherSubsqs
-                                    && endIndexThisSubsqsMatchElement <= endIndexOtherSubsqs;
-
-                                bool isThisSbSQS_anInterSectionOf_OtherSbSQS_end = startIndexThisSubsqsMatchElement >= startIndexOtherSubsqs
-                                    && endIndexThisSubsqsMatchElement > endIndexOtherSubsqs;
-
-                                bool isAnIntersection = isThisSbSQS_anInterSectionOf_OtherSbSQS_start || isThisSbSQS_anInterSectionOf_OtherSbSQS_end;
 
                                 if (isThisSbSQS_inside_OtherSbSQS)
                                 {
