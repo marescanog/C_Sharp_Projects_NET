@@ -20,52 +20,107 @@ namespace BackendForTranscriptionChecker.Workers
             List<MatchObj> evalMatches = new List<MatchObj>(GetMatches(possibleSubsequences, evalString));
             List<MatchObj> refMatches = new List<MatchObj>(GetMatches(possibleSubsequences, refString));
 
+            List<string> evalSeg = new List<string>(ConvertMatchList_ToStringList(evalMatches));
+            List<string> refSeg = new List<string>(ConvertMatchList_ToStringList(refMatches));
+            List<string> originalRefString = new List<string>(SegmenttMatches(possibleSubsequences, refString));
 
-            List<string> test = new List<string>(SegmenttMatches(possibleSubsequences, refString));
+            List<string> regexPatternCorrectmatch = new List<string>();
+            List<string> regexPatternMismatch = new List<string>();
 
-            //Need to Get Broken Down Original
-
-
-            //Get Max capacity
-            int maxCapEval = evalString.Split(Constants.s).Length;
-            int maxCapRef = refString.Split(Constants.s).Length;
-            int maxCapoverall = maxCapEval >= maxCapRef ? maxCapEval : maxCapRef;
-
-            /////Assign Array - Make into function Return MatchObj[], gets int MaxCapacity, gets List<MatchObj> matchObjList
-            ///returns List<MatchObj>
-            MatchObj[] evalMatchesArray = new MatchObj[maxCapoverall];
-            MatchObj[] refMatchesArray = new MatchObj[maxCapoverall];
-
-            List<MatchObj> evalMatchesNew = new List<MatchObj>(evalMatchesArray.ToList());
-            List<MatchObj> refMatchesNew = new List<MatchObj>(refMatchesArray.ToList());
-
-            for (int i=0; i< evalMatches.Count; i++)
+            for (int oS = 0, r = 0, e = 0; oS < originalRefString.Count;)
             {
-                evalMatchesNew[i] = evalMatches[i];
+                if(originalRefString[oS] == refSeg[r])
+                {
+                    if( refSeg[r] == evalSeg[e])
+                    {
+                        if(e < evalSeg.Count - 1 && r < refSeg.Count - 1)
+                        {
+                            //its Correct
+                            regexPatternCorrectmatch.Add(Constants.delimiter);
+                            regexPatternMismatch.Add(string.Concat("(?:", originalRefString[oS], ")"));
+
+                            oS++;
+                            e++;
+                            r++;
+                        }
+                        else if (e < evalSeg.Count - 1)
+                        {
+                            regexPatternCorrectmatch.Add(Constants.delimiter);
+                            regexPatternMismatch.Add(string.Concat("(?:", originalRefString[oS], ")"));
+                            oS++;
+                            e++;
+                        }
+                        else if (r < refSeg.Count - 1)
+                        {
+                            //Its correct
+                            regexPatternCorrectmatch.Add(Constants.delimiter);
+                            regexPatternMismatch.Add(string.Concat("(?:", originalRefString[oS], ")"));
+
+                            oS++;
+                            r++;
+                        }
+                        else
+                        {
+                            regexPatternCorrectmatch.Add(Constants.delimiter);
+                            regexPatternMismatch.Add(string.Concat("(?:", originalRefString[oS], ")"));
+                            oS++;
+                        }
+                    }
+                    else
+                    {
+                        if(e < evalSeg.Count - 1)
+                        {
+                            //is a mistake
+                            regexPatternCorrectmatch.Add(string.Concat("(?:", evalSeg[e], "?)"));
+                            regexPatternMismatch.Add(Constants.delimiter);
+
+                            e++;
+                        }
+                        else
+                        {
+                            if (r < refSeg.Count - 1)
+                            {
+                                //Not Sure
+                                regexPatternCorrectmatch.Add(string.Concat("(?:", originalRefString[oS], ")"));
+                                regexPatternMismatch.Add(Constants.delimiter);
+                                r++;
+                                oS++;
+                            }
+                            else
+                            {
+                                regexPatternCorrectmatch.Add(string.Concat("(?:", originalRefString[oS], ")"));
+                                regexPatternMismatch.Add(Constants.delimiter);
+                                oS++;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //(?:regex) non capturing group since incorrect
+                    regexPatternCorrectmatch.Add(string.Concat("(?:",originalRefString[oS], ")"));
+                    regexPatternMismatch.Add(Constants.delimiter);
+                    oS++;
+                }
             }
 
-            for (int i = 0; i < refMatches.Count; i++)
-            {
-                refMatchesNew[i] = refMatches[i];
-            }
-            /////////
+            string regexPatCorMatch = String.Join("\\b", regexPatternCorrectmatch);
+            string regexPatMisMatch = String.Join("\\b", regexPatternMismatch);
 
-            /////Move to right
-            for (int i = 0; i < evalMatchesArray.Length; i++)
-            {
-
-            }
-
-
-
-
-                //if the first position in evalMatches is 0 then no starting words were added/changed/
-                //if the first position in refMatches is 0 then no starting words were dropped <--
-                //if the first potition in refmatches 
-
-                Console.WriteLine("aaaaaaaaaaaaaah");
+            Console.WriteLine("aaaaaaaaaaaaaah");
         }
 
+        private List<string> ConvertMatchList_ToStringList(List<MatchObj> matchObjList)
+        {
+            List<string> listString = new List<string>();
+
+            foreach(var match in matchObjList)
+            {
+                listString.Add(match.GetString());
+            }
+
+            return listString;
+        }
 
         private List<MatchObj> GetMatches(List<string> possibleSubsequences, string dataString)
         {
