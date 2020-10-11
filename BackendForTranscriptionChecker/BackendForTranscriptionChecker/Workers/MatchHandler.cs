@@ -36,7 +36,7 @@ namespace BackendForTranscriptionChecker.Workers
                         if(e < evalSeg.Count - 1 && r < refSeg.Count - 1)
                         {
                             //its Correct
-                            regexPatternCorrectmatch.Add(Constants.delimiter);
+                            regexPatternCorrectmatch.Add(string.Concat("(", originalRefString[oS], ")"));
                             regexPatternMismatch.Add(string.Concat("(?:", originalRefString[oS], ")"));
 
                             oS++;
@@ -45,7 +45,7 @@ namespace BackendForTranscriptionChecker.Workers
                         }
                         else if (e < evalSeg.Count - 1)
                         {
-                            regexPatternCorrectmatch.Add(Constants.delimiter);
+                            regexPatternCorrectmatch.Add(string.Concat("(", originalRefString[oS], ")"));
                             regexPatternMismatch.Add(string.Concat("(?:", originalRefString[oS], ")"));
                             oS++;
                             e++;
@@ -53,7 +53,7 @@ namespace BackendForTranscriptionChecker.Workers
                         else if (r < refSeg.Count - 1)
                         {
                             //Its correct
-                            regexPatternCorrectmatch.Add(Constants.delimiter);
+                            regexPatternCorrectmatch.Add(string.Concat("(", originalRefString[oS], ")"));
                             regexPatternMismatch.Add(string.Concat("(?:", originalRefString[oS], ")"));
 
                             oS++;
@@ -61,7 +61,7 @@ namespace BackendForTranscriptionChecker.Workers
                         }
                         else
                         {
-                            regexPatternCorrectmatch.Add(Constants.delimiter);
+                            regexPatternCorrectmatch.Add(string.Concat("(", originalRefString[oS], ")"));
                             regexPatternMismatch.Add(string.Concat("(?:", originalRefString[oS], ")"));
                             oS++;
                         }
@@ -104,7 +104,7 @@ namespace BackendForTranscriptionChecker.Workers
                 }
             }
 
-            string regexPatCorMatch = String.Join("\\b", regexPatternCorrectmatch);
+            string regexPatCorMatch = String.Join("\\b", regexPatternCorrectmatch); //this capturing group is wrong
             string regexPatMisMatch = String.Join("\\b", regexPatternMismatch);
 
             Console.WriteLine("aaaaaaaaaaaaaah");
@@ -130,19 +130,38 @@ namespace BackendForTranscriptionChecker.Workers
             {
                 Regex regex = new Regex(string.Concat(Constants.regexPatternBuildStart, sequence, Constants.regexPatternBuildEnd), RegexOptions.IgnoreCase);
                 MatchCollection matchSubSqsinDataString = regex.Matches(dataString);
+
                 List<int> dataListPos = new List<int>(_subSQSPositionGenerator.GenerateListOfPositions_forthisSubSqs(matchSubSqsinDataString));
+
                 int length = sequence.Split(Constants.s).Length;
+                int charLength = sequence.ToCharArray().Length;
 
                 if(matchSubSqsinDataString.Count>0)
                 {
+                    //Extractor only the numbers that matter that is from 0 to the current pos of the sequence
+
                     foreach (var pos in dataListPos)
                     {
-                        listOfMatches.Add(new MatchObj(sequence, pos, pos + length - 1));
+                        int totalOffset = 0;
+
+                        Regex numberSeeker = new Regex("<(\\d{1,4})>", RegexOptions.IgnoreCase);
+                        MatchCollection numberExtractor = numberSeeker.Matches(dataString.Substring(0, pos));
+
+                        foreach (Match match in numberExtractor)
+                        {
+                            if (Int32.TryParse(match.Groups[1].Value, out int j))
+                            {
+                                totalOffset = totalOffset + j;
+                            }
+                            totalOffset = totalOffset - 2 - match.Groups[1].Value.Length;
+                        }
+
+                        listOfMatches.Add(new MatchObj(sequence, pos+totalOffset, pos+totalOffset + length - 1));
                     }
                 }
 
                 //alter datastring
-                dataString = Regex.Replace(dataString, string.Concat(Constants.regexPatternBuildStart, sequence, Constants.regexPatternBuildEnd), "/");
+                dataString = Regex.Replace(dataString, string.Concat(Constants.regexPatternBuildStart, sequence, Constants.regexPatternBuildEnd), "<"+ charLength + ">");
             }
 
             SortMatches(listOfMatches);

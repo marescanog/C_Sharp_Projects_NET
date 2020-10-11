@@ -15,12 +15,12 @@ namespace BackendForTranscriptionChecker
         {
             try
             {
-                /*
+                
                 FileReader fileReader = new FileReader();
 
                 List<string> refArray = fileReader.Read("Reference.txt");
                 List<string> evalArray = fileReader.Read("Evaluated.txt");
-                */
+                
 
                 
 
@@ -94,10 +94,10 @@ namespace BackendForTranscriptionChecker
                     "out", "their", "lives"
                 };
                 */
+                
 
-
-                string[] refArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
-                string[] evalArray = { "A", "B", "A", "F", "A", "B" };
+                //string[] refArray = { "D", "B", "A", "B", "A", "A", "B", "F" };
+                //string[] evalArray = { "A", "B", "A", "F", "A", "B" };
 
                 //string[] refArray = { "A", "B", "F", "F", "F", "F", "G", "H", "I", "J", "K", "L" };
                 //string[] evalArray = { "A", "B", "B", "B", "B", "I", "I", "I", "I", "F" };
